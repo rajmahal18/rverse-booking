@@ -47,12 +47,12 @@ export default function DemoRoleChooser({ open, onChoose }: { open: boolean; onC
             <div className="role-options">
               <button onClick={() => choose('player')}>
                 <span className="role-icon"><CalendarIcon /></span>
-                <span><b>Player view</b><small>Check availability, select court-hours, and complete a sample booking.</small></span>
+                <span><b>Book as a player</b><small>See available court-hours, choose your slots, and complete a sample booking.</small></span>
                 <Arrow />
               </button>
               <button onClick={() => choose('staff')}>
                 <span className="role-icon"><GridIcon /></span>
-                <span><b>Court Staff view</b><small>Manage the schedule, bookings, payment proofs, rates, and venue details.</small></span>
+                <span><b>Manage as court staff</b><small>See today’s schedule, add bookings, review payments, and change court details.</small></span>
                 <Arrow />
               </button>
             </div>

@@ -943,3 +943,287 @@ button:disabled{cursor:not-allowed}
   .schedule-grid-row>span{font-size:8.5px}
   .schedule-cell strong{font-size:9px}
 }
+
+/* =========================================================
+   V1.1 — FIRST-GLANCE UX
+   Keep the information. Reduce the decoding work.
+   ========================================================= */
+
+/* Shared task clarity */
+.demo-bar-context{display:flex;align-items:center;gap:9px}
+.demo-bar-context>span{display:grid;gap:1px}
+.demo-bar-context small{font-size:9px;color:#a9a49b}
+.demo-switch{font-weight:750;color:#f7f3ec!important}
+.player-mobile-nav{display:none}
+
+/* Simpler booking progress */
+.booking-stepper{max-width:680px;margin:0 0 38px;display:grid;gap:10px}
+.booking-stepper>div:first-child{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.booking-stepper span{font-size:10px;color:#747b91}
+.booking-stepper strong{font-size:12px;color:var(--prv-navy);font-weight:900}
+.booking-stepper-track{height:5px;border-radius:999px;background:#e0e3ea;overflow:hidden}
+.booking-stepper-track i{display:block;height:100%;background:var(--prv-blue);border-radius:inherit;transition:width .2s ease}
+
+/* Staff schedule uses the same one-glance language as Player booking */
+.staff-cell-code{display:none}
+.staff-cell-copy{display:grid;gap:3px;min-width:0}
+.staff-schedule-help{display:grid;gap:10px}
+.staff-schedule-help>p{margin:0;font-size:10px;line-height:1.5;color:#6b7288}
+.staff-slot-legend{display:flex;flex-wrap:wrap;gap:7px 12px}
+.staff-slot-legend>span{display:inline-flex;align-items:center;gap:5px;font-size:9px;color:#666f86;font-weight:750}
+.staff-slot-legend i{font-style:normal;width:21px;height:21px;border-radius:6px;display:grid;place-items:center;font-size:9px;font-weight:950}
+.staff-slot-legend i.available{background:#d8ff5f;color:#14203f}
+.staff-slot-legend i.booked{background:#dce3ff;color:#2447ff}
+.staff-slot-legend i.reserved{background:#ffe0d9;color:#b74331}
+.staff-slot-legend i.blocked{background:#e4e3df;color:#64645f}
+.settings-mobile-save{display:none}
+
+@media(max-width:760px){
+  /* Sales stays informative, but the first screen is calmer and faster to scan. */
+  .sales-nav{height:64px}
+  .sales-hero{padding-top:24px}
+  .hero-grid{padding:36px 0 44px;gap:36px}
+  .hero-main h1{font-size:clamp(43px,12.5vw,62px);line-height:.94;letter-spacing:-.055em}
+  .hero-main>p{font-size:14px;line-height:1.55;margin-top:22px;max-width:520px}
+  .hero-ctas{width:100%;margin-top:28px;gap:12px;align-items:stretch}
+  .hero-ctas .primary-cta{width:100%;min-height:52px}
+  .hero-ctas .plain-cta{align-self:flex-start;font-size:12px}
+  .demo-door{min-height:390px}
+  .demo-door-copy strong{font-size:30px}
+  .proof-section,.one-click-section,.faq-modern,.final-cta{padding:72px 0}
+  .proof-copy h2,.one-click-section h2,.pricing-intro h2,.faq-title h2,.final-cta h2{font-size:clamp(38px,11vw,48px)}
+  .principle-block h3{font-size:28px;margin-top:38px}
+  .principle-block{min-height:240px}
+  .pricing-intro{min-height:0;padding:38px 0}
+  .price-option,.price-option:first-of-type{min-height:360px}
+
+  /* Demo context: one role indicator, one switch action. */
+  .demo-bar{min-height:48px;height:48px;padding:0 10px;overflow:visible}
+  .demo-bar-context{gap:7px;min-width:0}
+  .demo-bar-context>span{min-width:0}
+  .demo-bar-context strong{font-size:10px;white-space:nowrap}
+  .demo-bar-context small{font-size:8px}
+  .demo-bar-actions{gap:3px}
+  .demo-bar-actions a,.demo-bar-actions button{height:34px;min-height:34px;padding:0 8px;border:0;border-radius:8px;font-size:9px}
+  .demo-bar-actions .demo-switch span{display:none}
+  .demo-bar-actions button:nth-child(2){width:34px;padding:0;justify-content:center}
+  .demo-bar-actions button:nth-child(2) span{display:none}
+  .demo-bar-actions .back-sales{padding:0 8px!important}
+
+  /* Player home: obvious next actions, useful info stays below. */
+  .court-shell,.manage-booking-shell{padding-bottom:82px}
+  .court-nav{height:64px}
+  .court-nav nav>a:not(.court-book-small){display:none!important}
+  .court-book-small{min-height:40px!important;padding:0 14px!important;font-size:10px!important}
+  .court-hero{padding:30px 0 36px;gap:28px}
+  .court-kicker{font-size:9px!important;padding:7px 9px}
+  .court-hero-copy h1{font-size:clamp(44px,12.8vw,58px);line-height:.95}
+  .court-hero-copy p{font-size:13px;line-height:1.55;margin-top:18px}
+  .court-hero-actions{display:grid!important;grid-template-columns:1fr 1fr;gap:9px;margin-top:24px}
+  .court-main-cta,.court-secondary-cta{width:100%;min-height:48px!important;justify-content:center!important;text-align:center;border-radius:12px!important}
+  .court-main-cta{justify-content:space-between!important;padding:0 15px!important}
+  .court-photo-card{min-height:220px;height:52vw;border-radius:18px;box-shadow:5px 5px 0 var(--prv-navy)}
+  .court-photo-card figcaption{padding:10px 12px!important}
+  .court-photo-card figcaption>strong{font-size:19px}
+  .court-photo-card figcaption>small{font-size:9px}
+  .court-facts-strip{grid-template-columns:1fr 1fr;width:min(100% - 28px,1280px);margin-bottom:0}
+  .court-facts-strip>div{min-height:68px;padding:11px 12px;border-top:1px solid var(--prv-line)}
+  .court-facts-strip>div:nth-child(odd){border-left:0}
+  .court-facts-strip>div:nth-child(-n+2){border-top:0}
+  .court-facts-strip span{font-size:8px}.court-facts-strip strong{font-size:10px}
+  .availability-ribbon{grid-template-columns:1fr;gap:12px;padding:18px 0}
+  .quick-slots{grid-column:auto;grid-row:auto;display:grid;grid-template-columns:1fr 1fr;gap:7px;overflow:visible!important}
+  .quick-slots>div{display:block}
+  .quick-slots a{width:100%;justify-content:center;min-height:42px}
+  .availability-ribbon>a{justify-self:start}
+  .court-list-section{padding:70px 0}
+  .court-section-head h2,.court-rules h2,.venue-gallery-head h2,.venue-location-head h2,.venue-story-copy h2{font-size:36px;line-height:1}
+  .court-cards article{padding:22px 0}
+
+  /* Persistent player navigation only where users are browsing, not during checkout. */
+  .player-mobile-nav{position:fixed;z-index:85;left:10px;right:10px;bottom:max(8px,env(safe-area-inset-bottom));height:64px;background:#101a3a;color:#c9d0e3;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:5px;display:grid;grid-template-columns:repeat(3,1fr);box-shadow:0 12px 35px rgba(16,26,58,.22)}
+  .player-mobile-nav a{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;border-radius:13px;font-size:9px;font-weight:800}
+  .player-mobile-nav a svg{width:17px;height:17px}
+  .player-mobile-nav a.active{background:var(--prv-blue);color:white}
+
+  /* Booking: the task starts immediately and never hides the next step. */
+  .booking-nav{height:60px}
+  .booking-brand .prv-brand-lockup{width:126px}
+  .booking-nav>a:last-child{font-size:10px}
+  .booking-main{padding-top:18px}
+  .booking-stepper{margin-bottom:24px;gap:8px}
+  .booking-stepper span{font-size:9px}.booking-stepper strong{font-size:11px}
+  .step-head{margin-bottom:20px}
+  .step-head>span{font-size:9px!important}
+  .step-head h1{font-size:clamp(31px,9.5vw,39px)!important;line-height:1;letter-spacing:-.04em}
+  .step-head p{font-size:12px!important;line-height:1.5;margin-top:10px!important}
+  .matrix-date-block{margin-bottom:14px!important}
+  .matrix-date-block>span{font-size:9px}
+  .matrix-dates{gap:5px}
+  .matrix-dates button{height:52px;border-radius:10px;padding:6px 4px}
+  .matrix-dates button strong{font-size:9px}.matrix-dates button small{font-size:8px}
+  .slot-legend-wrap{display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:10px!important}
+  .slot-legend{gap:5px 9px;padding:7px 8px;border-radius:10px}
+  .slot-legend>span{font-size:8.5px}.slot-legend i{width:20px;height:20px;font-size:9px;border-radius:6px}
+  .legend-help{width:max-content;min-height:34px;font-size:9px}
+  .legend-guide{grid-template-columns:1fr 1fr;padding:10px;border-radius:10px}
+  .public-schedule-matrix{grid-template-columns:54px repeat(3,minmax(0,1fr));gap:3px;padding:4px;border-radius:12px}
+  .public-matrix-head{height:42px;border-radius:7px}.public-matrix-head strong{font-size:9.5px}.public-matrix-head small{display:none}
+  .matrix-time-head{font-size:8px}.matrix-time{height:38px;padding:0 4px}.matrix-time strong{font-size:8.5px}
+  .matrix-slot{height:38px;border-radius:7px}.matrix-slot span{font-size:11px}
+  .matrix-hint{font-size:9px;margin-top:8px}
+  .slot-cart-bar{bottom:max(8px,env(safe-area-inset-bottom));width:calc(100% - 16px)}
+  .slot-cart-open{min-height:60px;border-radius:16px;padding:7px 8px 7px 13px;grid-template-columns:1fr auto auto;gap:9px}
+  .slot-cart-open>span{display:flex;align-items:baseline;gap:5px}.slot-cart-open>span b{font-size:12px}.slot-cart-open>span small{font-size:9px}
+  .slot-cart-open>strong{font-size:17px}.slot-cart-open>i{min-height:40px;padding:0 11px;font-size:9px;border-radius:11px}
+  .slot-cart-drawer{max-height:88vh;overflow:auto;padding:20px 15px;border-radius:22px 22px 10px 10px}
+  .details-card{padding:16px!important;border-radius:16px!important}
+  .details-card>label,.online-panel>label{font-size:10px}
+  .details-card input{height:50px;font-size:15px}
+  .step-actions{display:grid!important;grid-template-columns:auto 1fr;gap:8px!important}
+  .step-actions .book-next{width:100%;justify-content:space-between}
+  .payment-layout{display:flex!important;flex-direction:column;gap:16px!important}
+  .payment-layout .booking-summary{order:-1;position:static;padding:18px!important;box-shadow:4px 4px 0 var(--prv-navy)}
+  .payment-layout .booking-summary h3{font-size:23px!important;margin:6px 0 16px!important}
+  .payment-methods>button{min-height:70px;padding:13px 14px}
+  .payment-methods>button strong{font-size:14px}.payment-methods>button small{font-size:10px}
+  .fake-checkout{padding:18px}.fake-checkout>strong{font-size:30px!important}
+  .proof-upload{padding:14px!important}
+  .booking-complete{padding-top:10px!important}
+  .booking-complete h1{font-size:46px!important}
+  .complete-actions{gap:8px!important}
+  .complete-actions>a{width:100%;justify-content:center;border-radius:12px!important}
+
+  /* My booking: forms read like a normal task, not a settings screen. */
+  .manage-booking-main{padding-top:28px}
+  .manage-lookup h1{font-size:38px!important;line-height:1!important}
+  .manage-lookup>p{font-size:12px}
+  .manage-search-card{padding:10px;border-radius:14px}
+  .manage-search-card label{font-size:9px;padding:5px 8px}
+  .manage-search-card input{height:44px;font-size:15px}
+  .manage-search-card>button{width:100%;min-height:48px;justify-content:center;border-radius:11px}
+  .manage-result{padding:16px;border-radius:16px;box-shadow:4px 4px 0 var(--prv-navy)}
+  .manage-slot-stack article{padding:11px;border-radius:12px}
+  .manage-slot-change select,.manage-slot-change button,.manage-remove-slot{height:44px;font-size:11px}
+  .manage-actions .book-next{width:100%;justify-content:space-between}
+
+  /* Court Staff: clear top context + labeled bottom navigation. */
+  .admin-app{display:block;min-height:calc(100vh - 48px)}
+  .admin-sidebar{height:58px;padding:8px 12px;position:sticky;top:0;z-index:65;display:flex;align-items:center;background:#101a3a;overflow:visible}
+  .admin-brand-custom .prv-brand-mark{width:38px;height:38px}
+  .admin-sidebar nav{position:fixed;z-index:90;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));height:66px;margin:0;padding:5px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:#101a3a;border:1px solid rgba(255,255,255,.1);border-radius:18px;box-shadow:0 12px 35px rgba(16,26,58,.25);overflow:visible}
+  .admin-sidebar nav button{min-width:0;width:100%;height:56px;padding:3px 2px;display:flex;flex-direction:column;gap:3px;justify-content:center;border-radius:13px;font-size:8px;line-height:1.05;color:#b9c1d7;white-space:normal;text-align:center}
+  .admin-sidebar nav button svg{display:block!important;width:16px;height:16px}
+  .admin-sidebar nav button span{display:block!important}
+  .admin-sidebar nav button b{position:absolute;margin:0;transform:translate(15px,-17px);min-width:16px;height:16px;font-size:7px}
+  .admin-sidebar nav button.active{background:var(--prv-blue);color:white}
+  .admin-content{padding:16px 12px 94px}
+  .admin-top{padding-bottom:16px;align-items:center}
+  .admin-top>div>span{display:none}
+  .admin-top h1{font-size:28px}
+  .admin-primary{width:auto;min-width:0!important;min-height:42px;padding:0 13px!important;font-size:10px!important;border-radius:11px!important}
+  .admin-primary span{display:inline!important}
+  .admin-primary svg{width:15px}
+  .admin-venue-banner{min-height:120px!important;border-radius:14px!important;overflow:hidden}
+  .admin-venue-banner>div{padding:12px!important}
+  .admin-venue-banner .prv-brand-lockup{width:125px!important}
+  .admin-venue-banner>div>span,.admin-venue-banner>div>small{font-size:9px!important}
+  .admin-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px}
+  .admin-metrics article{min-height:104px;padding:12px 9px;border-radius:12px}
+  .admin-metrics span{font-size:8px;line-height:1.25}.admin-metrics strong{font-size:25px}.admin-metrics small{font-size:8px;line-height:1.3}
+  .admin-panel{padding:15px;border-radius:13px;margin-bottom:10px}
+  .panel-head{margin-bottom:14px}.panel-head h2,.list-head h2{font-size:20px}
+  .admin-toolbar{gap:11px}
+  .admin-date-tabs{width:100%;display:grid!important;grid-template-columns:repeat(5,1fr);gap:4px;overflow:visible!important}
+  .admin-date-tabs button{width:100%;height:50px;border-radius:9px}.admin-date-tabs small{font-size:8px}.admin-date-tabs strong{font-size:14px}
+  .staff-schedule-help{width:100%;padding:10px;border:1px solid rgba(16,26,58,.12);border-radius:12px;background:#fffaf0}
+  .staff-slot-legend{gap:5px 9px}.staff-slot-legend>span{font-size:8px}.staff-slot-legend i{width:19px;height:19px;font-size:8px}
+  .staff-schedule-help>p{font-size:9px}
+  .schedule-grid{border-radius:12px;overflow:hidden}
+  .schedule-grid-head,.schedule-grid-row{grid-template-columns:52px repeat(3,minmax(0,1fr));min-width:0}
+  .schedule-grid-head{height:42px}.schedule-grid-head>*{padding:0 3px;font-size:8px;text-align:center}.schedule-grid-head>span{text-align:left;padding-left:5px}
+  .schedule-grid-row{min-height:43px}.schedule-grid-row>span{padding:9px 4px;font-size:8px}.schedule-grid-row>div{padding:2px;min-width:0}
+  .schedule-cell{min-height:39px;padding:3px;border:0!important;border-radius:7px;display:grid;place-items:center}
+  .staff-cell-copy{display:none}.staff-cell-code{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;font-size:10px;font-weight:950}
+  .schedule-cell.available .staff-cell-code{background:#d8ff5f;color:#14203f}
+  .schedule-cell.booked:not(.pending) .staff-cell-code{background:#dce3ff;color:#2447ff}
+  .schedule-cell.pending .staff-cell-code{background:#ffe0d9;color:#b74331}
+  .schedule-cell.blocked .staff-cell-code{background:#e4e3df;color:#64645f}
+  .booking-table>button{padding:13px;border-radius:12px!important}
+  .payment-review-grid article{border-radius:14px}
+  .settings-intro,.settings-section,.settings-map-preview{padding:16px;border-radius:14px}
+  .settings-intro h2{font-size:26px}.settings-intro p{font-size:11px}
+  .court-settings-grid article{padding:14px;border-radius:12px}
+  .settings-section input,.settings-section textarea{font-size:14px!important}
+  .settings-mobile-save{position:fixed;z-index:88;right:12px;bottom:82px;min-height:46px;padding:0 16px;border:0;border-radius:14px;background:var(--prv-blue);color:white;display:flex;align-items:center;gap:8px;font-size:10px;font-weight:850;box-shadow:0 10px 24px rgba(36,71,255,.25)}
+  .settings-mobile-save svg{width:15px}
+  .admin-drawer-layer{inset:48px 0 0}
+  .booking-drawer{width:min(100%,520px);padding:20px 16px 28px}
+  .booking-drawer h2{font-size:31px}
+  .drawer-facts{grid-template-columns:1fr 1fr!important}
+  .drawer-reschedule{padding:12px!important}
+  .drawer-reschedule select,.drawer-reschedule button,.drawer-cancel{min-height:44px}
+}
+
+@media(max-width:420px){
+  .demo-bar-context strong{display:none}
+  .demo-bar-context small{font-size:8.5px;color:#f7f3ec}
+  .demo-bar-actions .back-sales{font-size:8px}
+  .role-card-head>strong{font-size:28px}
+  .role-options>button{min-height:118px}
+  .role-options b{font-size:16px}
+
+  .court-brand-image{min-width:118px}.court-brand-image .prv-brand-lockup{width:118px}
+  .court-hero-actions{grid-template-columns:1fr}
+  .court-facts-strip{grid-template-columns:1fr 1fr}
+  .court-facts-strip>div{min-height:64px}
+
+  .matrix-dates{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .public-schedule-matrix{grid-template-columns:50px repeat(3,minmax(0,1fr))}
+  .slot-cart-open{grid-template-columns:1fr auto}.slot-cart-open>i{grid-column:1/-1;min-height:34px;justify-content:center}.slot-cart-open>span small{display:none}
+
+  .admin-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.admin-metrics article{padding:10px 7px}.admin-metrics strong{font-size:21px}.admin-metrics small{display:none}
+  .admin-sidebar nav button{font-size:7.5px}.admin-sidebar nav button svg{width:15px;height:15px}
+}
+
+/* V1.1 settings progressive disclosure */
+.settings-accordion{padding:0!important;overflow:hidden}
+.settings-accordion>summary{list-style:none;min-height:78px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px;cursor:pointer;user-select:none}
+.settings-accordion>summary::-webkit-details-marker{display:none}
+.settings-accordion>summary>span{display:grid;gap:5px}
+.settings-accordion>summary small{font-size:9px;text-transform:uppercase;letter-spacing:.11em;color:#707991;font-weight:850}
+.settings-accordion>summary strong{font-size:18px;color:var(--prv-navy);font-weight:900;letter-spacing:-.025em}
+.settings-accordion>summary>b{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#eef1ff;color:var(--prv-blue);font-size:18px;font-weight:500;transition:transform .18s ease}
+.settings-accordion[open]>summary>b{transform:rotate(45deg)}
+.settings-accordion[open]>summary{border-bottom:1px solid rgba(16,26,58,.12)}
+.settings-section-body{padding:20px 22px 24px}
+.settings-map-preview .settings-section-body{padding:14px}
+
+@media(max-width:760px){
+  .settings-accordion>summary{min-height:68px;padding:14px 15px}
+  .settings-accordion>summary small{font-size:8px}
+  .settings-accordion>summary strong{font-size:15px;line-height:1.25}
+  .settings-accordion>summary>b{width:30px;height:30px}
+  .settings-section-body{padding:14px}
+}
+@media(max-width:760px){
+  .court-nav nav{display:none!important}
+  .admin-brand>span:last-child{display:grid!important}
+  .admin-brand strong{font-family:var(--sans)!important;font-size:12px!important;font-weight:900!important;color:white}
+  .admin-brand small{display:block!important;font-size:8px!important;color:#aeb6d0!important;opacity:1!important;margin-top:2px!important}
+}
+@media(max-width:420px){
+  .admin-sidebar nav button{font-size:8.5px}
+}
+.overview-schedule-head small{font-size:8px;color:#747b8e;text-align:center}
+.overview-key{display:flex!important;grid-template-columns:none!important;gap:12px!important;flex-wrap:wrap;margin-top:12px}
+.overview-key>span{display:inline-flex!important;align-items:center;gap:5px;font-size:8px!important;color:#73798a;font-weight:700}
+.overview-key i{width:9px;height:9px!important;border-radius:3px;background:#dfe5dc}
+.overview-key i.busy{background:#53655a}.overview-key i.pending{background:#ff9a83}.overview-key i.blocked{background:#c9c3b9}
+@media(max-width:760px){
+  .overview-schedule{gap:7px}
+  .overview-schedule>div{grid-template-columns:62px repeat(6,1fr)!important;gap:3px}
+  .overview-schedule-head span{font-size:8px!important}.overview-schedule-head small{font-size:7px}
+  .overview-schedule i{height:26px}
+  .overview-key{display:flex!important;gap:7px 10px!important}.overview-key>span{font-size:8px!important}.overview-key i{width:8px;height:8px!important}
+}

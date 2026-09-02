@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import DemoBar from '../components/DemoBar'
 import PickleRVerseBrand from '../components/PickleRVerseBrand'
 import VenueMap from '../components/VenueMap'
+import PlayerMobileNav from '../components/PlayerMobileNav'
 import { Arrow, CalendarIcon, ClockIcon, MapPinIcon } from '../components/Icons'
 import { makeDates, money, timeSlots, loadDemoState, isOccupied } from '../lib/demoStore'
 
@@ -35,7 +36,7 @@ export default function CourtHome() {
             <span className="court-kicker">{venue.locationLabel} · {venue.hours}</span>
             <h1>Three courts.<br/><em>One clear schedule.</em></h1>
             <p>{venue.description}</p>
-            <div className="court-hero-actions"><Link className="court-main-cta" to="/demo/book">Check availability <Arrow /></Link><a href="#venue" className="court-secondary-cta">Find the venue</a></div>
+            <div className="court-hero-actions"><Link className="court-main-cta" to="/demo/book">Book a court <Arrow /></Link><Link to="/demo/manage" className="court-secondary-cta">Find my booking</Link></div>
           </div>
           <motion.figure className="court-photo-card" whileHover={{ y: -3 }} transition={{ type: 'spring', stiffness: 220, damping: 24 }}>
             <img src="/brand/picklerverse-venue.webp" alt="PickleRVerse venue with Orbit, Nova, and Comet courts" />
@@ -111,6 +112,7 @@ export default function CourtHome() {
         <section className="court-final custom-court-final"><PickleRVerseBrand markOnly/><div><span>Ready to play?</span><h2>See all three courts and every timeslot in one view.</h2></div><div className="court-final-actions"><Link to="/demo/manage">Find my booking</Link><Link to="/demo/book">Book a court <Arrow/></Link></div></section>
       </main>
       <footer className="court-footer court-footer-brand"><PickleRVerseBrand /><span>{venue.address} · {venue.hours}</span><span>Fictional venue used for the booking-system demo.</span></footer>
+      <PlayerMobileNav />
     </div>
   )
 }

@@ -155,15 +155,18 @@ export default function BookingFlow() {
       </header>
 
       <main className="booking-main matrix-booking-main">
-        <div className="booking-progress">{steps.map((s,i) => <div className={i===step?'active':i<step?'done':''} key={s}><span>{i<step?<CheckIcon/>:i+1}</span><small>{s}</small></div>)}</div>
+        <div className="booking-stepper" aria-label={`Step ${step + 1} of ${steps.length}: ${steps[step]}`}>
+          <div><span>Step {step + 1} of {steps.length}</span><strong>{steps[step]}</strong></div>
+          <div className="booking-stepper-track"><i style={{ width: `${((step + 1) / steps.length) * 100}%` }} /></div>
+        </div>
 
         <AnimatePresence mode="wait" initial={false}>
           {step===0 && (
             <motion.section className="booking-step schedule-matrix-step" key="schedule" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.2}}>
-              <div className="step-head matrix-step-head"><span>01 / Schedule</span><h1>Tap every slot you want.</h1><p>All three courts stay visible. One box is one court-hour.</p></div>
+              <div className="step-head matrix-step-head"><span>Choose your schedule</span><h1>Tap the court-hours you want.</h1><p>Every court is on the same screen. Tap any green <b>A</b> to add it to your booking.</p></div>
 
               <div className="matrix-date-block">
-                <span>Choose a date</span>
+                <span>Pick a date</span>
                 <div className="matrix-dates">{dates.map((d,i)=><motion.button key={d.iso} className={date===d.iso?'selected':''} onClick={()=>changeDate(d.iso)} whileTap={{scale:.97}}><strong>{d.label}</strong><small>{i<2?`${d.dow}, ${d.month} ${Number(d.day)}`:`${d.month} ${Number(d.day)}`}</small></motion.button>)}</div>
               </div>
 
@@ -175,7 +178,7 @@ export default function BookingFlow() {
                   <span><i className="blocked">M</i>Blocked</span>
                   <span><i className="selected">✓</i>Selected</span>
                 </div>
-                <button className="legend-help" onClick={()=>setLegendOpen(value=>!value)}><InfoIcon/>{legendOpen?'Hide status guide':'Explain statuses'}</button>
+                <button className="legend-help" onClick={()=>setLegendOpen(value=>!value)}><InfoIcon/>{legendOpen?'Hide guide':'What do the letters mean?'}</button>
               </div>
               <AnimatePresence initial={false}>{legendOpen && <motion.div className="legend-guide" initial={{opacity:0,y:-5}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-5}}><span><b>A</b>Tap it to add that court-hour.</span><span><b>B</b>Confirmed booking.</span><span><b>R</b>Held while payment proof is reviewed.</span><span><b>M</b>Maintenance or staff-blocked time.</span><span><b>✓</b>Already in your cart.</span></motion.div>}</AnimatePresence>
 
@@ -202,17 +205,17 @@ export default function BookingFlow() {
                   </div>
                 ))}
               </div>
-              <p className="matrix-hint">Tap ✓ again to remove a slot. Change the date above to see another day.</p>
+              <p className="matrix-hint">Selected slots show ✓. Tap ✓ again if you change your mind.</p>
             </motion.section>
           )}
 
           {step===1 && (
             <motion.section className="booking-step narrow-step" key="details" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.2}}>
-              <div className="step-head"><span>02 / Details</span><h1>Who is the booking for?</h1><p>This is a demo. The pre-filled details are dummy data and can be changed.</p></div>
+              <div className="step-head"><span>Your details</span><h1>Who is playing?</h1><p>We use these details for the booking record. The demo fields are pre-filled so you can move quickly.</p></div>
               <div className="details-card">
-                <label>Name<input value={name} onChange={e=>setName(e.target.value)} /></label>
-                <label>Mobile number<input value={phone} onChange={e=>setPhone(e.target.value)} /></label>
-                <label>Email <small>optional</small><input value={email} onChange={e=>setEmail(e.target.value)} /></label>
+                <label>Name<input autoComplete="name" value={name} onChange={e=>setName(e.target.value)} /></label>
+                <label>Mobile number<input inputMode="tel" autoComplete="tel" value={phone} onChange={e=>setPhone(e.target.value)} /></label>
+                <label>Email <small>optional</small><input type="email" autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} /></label>
                 <div className="detail-policy"><CheckIcon/><p>PickleRVerse allows rescheduling at least 6 hours before play.</p></div>
                 <div className="step-actions"><button onClick={back}>Back</button><button className="book-next" onClick={next}>Continue to payment <Arrow/></button></div>
               </div>
@@ -221,7 +224,7 @@ export default function BookingFlow() {
 
           {step===2 && (
             <motion.section className="booking-step" key="payment" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.2}}>
-              <div className="step-head"><span>03 / Payment</span><h1>Choose how to pay.</h1><p>No real charge happens in this demo.</p></div>
+              <div className="step-head"><span>Payment</span><h1>How would you like to pay?</h1><p>Your total is shown before you continue. No real charge happens in this demo.</p></div>
               <div className="payment-layout">
                 <div className="payment-methods">
                   <button className={payment==='online'?'selected':''} onClick={()=>setPayment('online')}><span><strong>Pay online</strong><small>Simulated instant payment</small></span><span>Instant confirmation</span></button>
@@ -274,7 +277,7 @@ export default function BookingFlow() {
 
       <AnimatePresence>
         {step===0 && selectedItems.length>0 && <motion.div className="slot-cart-bar" initial={{y:90,opacity:0}} animate={{y:0,opacity:1}} exit={{y:90,opacity:0}} transition={{type:'spring',stiffness:320,damping:28}}>
-          <button className="slot-cart-open" onClick={()=>setCartOpen(true)}><span><b>{selectedItems.length}</b><small>court-hour{selectedItems.length!==1?'s':''} selected</small></span><strong>{money(total)}</strong><i>View summary <Arrow/></i></button>
+          <button className="slot-cart-open" onClick={()=>setCartOpen(true)} aria-label={`Review ${selectedItems.length} selected court-hour${selectedItems.length!==1?'s':''} totaling ${money(total)}`}><span><b>{selectedItems.length} slot{selectedItems.length!==1?'s':''}</b><small>selected</small></span><strong>{money(total)}</strong><i>Review <Arrow/></i></button>
         </motion.div>}
       </AnimatePresence>
 

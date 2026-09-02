@@ -4,6 +4,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import DemoBar from '../components/DemoBar'
 import PickleRVerseBrand from '../components/PickleRVerseBrand'
 import VenueMap from '../components/VenueMap'
+import PlayerMobileNav from '../components/PlayerMobileNav'
 import { Arrow, CheckIcon, SearchIcon } from '../components/Icons'
 import { bookingsForReference, getCourt, isDurationAvailable, loadDemoState, money, saveDemoState, shortDate, timeSlots, type DemoBooking, type DemoState } from '../lib/demoStore'
 
@@ -88,8 +89,8 @@ export default function BookingManage() {
           <h1>Find your booking.</h1>
           <p>Use the reference and mobile number from the booking. Demo values are pre-filled so you can try it immediately.</p>
           <div className="manage-search-card">
-            <label>Booking reference<input value={reference} onChange={e=>setReference(e.target.value.toUpperCase())} placeholder="PRV-2048"/></label>
-            <label>Mobile number<input value={phone} onChange={e=>setPhone(e.target.value)} placeholder="0917 555 0148"/></label>
+            <label>Booking reference<input autoCapitalize="characters" value={reference} onChange={e=>setReference(e.target.value.toUpperCase())} placeholder="PRV-2048"/></label>
+            <label>Mobile number<input inputMode="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="0917 555 0148"/></label>
             <button onClick={findBooking}><SearchIcon/>Find booking</button>
           </div>
           {error && <div className="manage-error">{error}</div>}
@@ -127,6 +128,7 @@ export default function BookingManage() {
 
         {!matches.length && activeReference==='' && <section className="manage-demo-tip"><span>Try the seeded demo</span><strong>PRV-2048</strong><small>0917 555 0148</small></section>}
       </main>
+      <PlayerMobileNav />
     </div>
   )
 }
