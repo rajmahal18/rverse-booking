@@ -9,6 +9,7 @@ import { clearDemoRole } from '../lib/demoRole'
 const questions = [
   ['Can staff add walk-ins or phone bookings?','Yes. Staff can create a booking from Court Staff, so walk-ins and phone reservations use the same schedule as online bookings.'],
   ['Can we block private or maintenance schedules?','Yes. A blocked slot is removed from the public booking choices immediately.'],
+  ['Will our booking system look like this sample?','No. The sample shows the workflow. Your booking system uses your own name, logo, colors, court setup, rates, rules, and payment instructions.'],
   ['Can customers upload payment proof?','Yes. You can use manual proof upload, online checkout, or both depending on the agreed setup.'],
   ['Can rates change by court, time, or day?','Yes. Rates can be configured by court and can support agreed peak-hour, weekend, or special pricing rules.'],
   ['Do customers need an app?','No. Customers book from a browser on their phone or computer.'],
@@ -100,7 +101,7 @@ export default function SalesPage() {
 
         <section className="customization-proof">
           <Reveal className="customization-image"><img src="/brand/picklerverse-venue.webp" alt="Customized PickleRVerse sample court"/><span>Sample client brand · PickleRVerse</span></Reveal>
-          <Reveal className="customization-copy"><span className="section-number">02 / Client branding</span><h2>Your court won’t look like PickleRVerse.</h2><p>PickleRVerse has its own logo, colors, court names, rates, venue details, rules, and payment instructions. A real client setup uses theirs.</p><div className="customization-list"><span>Logo + colors</span><span>Court names + rates</span><span>Venue details</span><span>Booking rules</span><span>Payment instructions</span></div><Link to="/demo" onClick={clearDemoRole}>See the branded sample <Arrow/></Link></Reveal>
+          <Reveal className="customization-copy"><span className="section-number">02 / Client branding</span><h2>Your booking system will have its own identity.</h2><p>The sample uses PickleRVerse to show the workflow. Your actual system is customized around your facility, so it uses your own branding, court setup, rates, rules, payment details, and operating process instead of looking like a template.</p><div className="customization-list"><span>Own logo + colors</span><span>Court names + rates</span><span>Venue details</span><span>Booking rules</span><span>Payment instructions</span></div><Link to="/demo" onClick={clearDemoRole}>See the branded sample <Arrow/></Link></Reveal>
         </section>
 
         <section className="one-click-section">

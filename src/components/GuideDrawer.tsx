@@ -26,7 +26,7 @@ export const guides: Record<string, Guide> = {
     kicker: 'Core scope',
     title: 'What is included in the booking system.',
     intro: 'The MVP covers the public booking experience and the staff controls needed to operate the schedule.',
-    items: ['Branded public booking site','Multiple courts or bookable resources','Availability and double-booking protection','Manual bookings and blocked hours','Payment status and proof tracking','Court staff access','Basic booking and revenue reporting','Mobile-friendly public and staff views'],
+    items: ['Branded public booking site with your own facility identity','Customized court names, colors, rates, rules, and payment instructions','Multiple courts or bookable resources','Availability and double-booking protection','Manual bookings and blocked hours','Payment status and proof tracking','Court staff access','Basic booking and revenue reporting','Mobile-friendly public and staff views'],
   },
   setup: {
     kicker: 'Setup',
