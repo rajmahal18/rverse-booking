@@ -38,7 +38,7 @@ export const guides: Record<string, Guide> = {
     kicker: 'Pricing',
     title: 'What each option means.',
     intro: 'The software scope stays similar. The difference is how development and ongoing operation are paid for.',
-    items: ['Fixed development: ₱15,000 upfront + ₱1,500/month hosting and routine maintenance.','Booking partnership: ₱0 upfront + ₱10 per booked court-hour, with hosting and routine maintenance included.','Payment-provider charges are separate from the convenience fee.','Custom integrations or scope outside the agreed booking system are quoted separately.'],
+    items: ['Fixed development: 1-3 courts ₱15,000, 4-6 courts ₱20,000, 7+ courts ₱25,000, plus ₱1,500/month hosting and routine maintenance.','Booking partnership: ₱0 upfront + ₱10 per booked court-hour, with hosting and routine maintenance included.','Payment-provider charges are separate from the convenience fee.','Custom integrations or scope outside the agreed booking system are quoted separately.'],
   },
 }
 

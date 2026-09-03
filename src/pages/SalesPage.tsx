@@ -118,7 +118,7 @@ export default function SalesPage() {
 
         <section className="pricing-modern" id="pricing">
           <div className="pricing-intro"><span className="section-number">04 / Pricing</span><h2>Choose how you want to pay for the system.</h2><p>Same system. Two ways to pay for it.</p></div>
-          <div className="price-option"><div><span>Option 1</span><h3>Fixed development</h3></div><div className="price-number">₱15,000</div><p>One-time development fee.<br/><b>₱1,500/month</b> for hosting and routine maintenance.</p><button onClick={() => setGuide('pricing')}>Read full terms →</button></div>
+          <div className="price-option"><div><span>Option 1</span><h3>Fixed development</h3></div><div className="price-number price-range">₱15k-₱25k</div><p>One-time development fee based on court count.<br/><b>1-3 courts: ₱15,000</b><br/><b>4-6 courts: ₱20,000</b><br/><b>7+ courts: ₱25,000</b><br/>₱1,500/month for hosting and routine maintenance.</p><button onClick={() => setGuide('pricing')}>Read full terms →</button></div>
           <div className="price-option partnership"><div><span>Option 2</span><h3>Booking partnership</h3></div><div className="price-number">₱0</div><p>No upfront development fee.<br/><b>₱10 per booked court-hour.</b></p><div className="fee-example"><span>2-hour booking</span><strong>₱20 convenience fee</strong></div><button onClick={() => setGuide('pricing')}>Read full terms →</button></div>
         </section>
 
