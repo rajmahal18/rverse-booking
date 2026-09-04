@@ -26,7 +26,7 @@ export default function VenueMap({ venue, compact = false }: Props) {
     <section className={`venue-map-card${compact ? ' compact' : ''}`} aria-label="Fictional PickleRVerse location map">
       <div className="venue-map-canvas">
         <svg viewBox="0 0 760 430" role="img" aria-label={`Illustrated map around ${venue.name}`}>
-          <rect width="760" height="430" fill="#f7f1e4" />
+          <rect width="760" height="430" className="map-ground" />
           <path d="M-40 318 C130 255 226 330 390 270 S645 200 820 245" className="map-river" />
           <path d="M86 -20 V450 M542 -20 V450" className="map-road-wide" />
           <path d="M-40 118 H810 M-40 360 H810" className="map-road" />

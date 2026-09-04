@@ -39,7 +39,7 @@ export default function DemoRoleChooser({ open, onChoose }: { open: boolean; onC
             transition={{ type: 'spring', stiffness: 340, damping: 30 }}
           >
             <div className="role-card-head">
-              <PickleRVerseBrand className="role-brand"/>
+              <PickleRVerseBrand className="role-brand" energy="active"/>
               <span>PickleRVerse sample court</span>
               <strong>Choose what you want to see.</strong>
               <p>Player view shows the public booking experience. Court Staff view shows the same schedule, bookings, payments, and venue settings.</p>

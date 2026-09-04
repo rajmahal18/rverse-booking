@@ -7,6 +7,7 @@ import BookingFlow from './pages/BookingFlow'
 import AdminDemo from './pages/AdminDemo'
 import BookingManage from './pages/BookingManage'
 import DemoRoleChooser from './components/DemoRoleChooser'
+import RallyRouteLoader from './components/RallyRouteLoader'
 import { getDemoRole, type DemoRole } from './lib/demoRole'
 
 function DemoGate({ children }: { children: ReactNode }) {
@@ -31,23 +32,26 @@ export default function App() {
   const reduceMotion = useReducedMotion()
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      <motion.div
-        key={location.pathname}
-        initial={reduceMotion ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={reduceMotion ? undefined : { opacity: 0 }}
-        transition={{ duration: 0.16 }}
-      >
-        <Routes location={location}>
-          <Route path="/" element={<SalesPage />} />
-          <Route path="/demo" element={<DemoGate><CourtHome /></DemoGate>} />
-          <Route path="/demo/book" element={<DemoGate><BookingFlow /></DemoGate>} />
-          <Route path="/demo/admin" element={<DemoGate><AdminDemo /></DemoGate>} />
-          <Route path="/demo/manage" element={<DemoGate><BookingManage /></DemoGate>} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </motion.div>
-    </AnimatePresence>
+    <>
+      <RallyRouteLoader routeKey={location.key || location.pathname} />
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={location.pathname}
+          initial={reduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={reduceMotion ? undefined : { opacity: 0 }}
+          transition={{ duration: 0.16 }}
+        >
+          <Routes location={location}>
+            <Route path="/" element={<SalesPage />} />
+            <Route path="/demo" element={<DemoGate><CourtHome /></DemoGate>} />
+            <Route path="/demo/book" element={<DemoGate><BookingFlow /></DemoGate>} />
+            <Route path="/demo/admin" element={<DemoGate><AdminDemo /></DemoGate>} />
+            <Route path="/demo/manage" element={<DemoGate><BookingManage /></DemoGate>} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </motion.div>
+      </AnimatePresence>
+    </>
   )
 }

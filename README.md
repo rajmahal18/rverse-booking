@@ -2,18 +2,23 @@
 
 Vite + React + TypeScript sales site and interactive fictional court demo.
 
-## V1.1 UX direction
+## V1.3 Living Court polish
 
-The interface is designed for first-glance usability on phones while keeping the premium PickleRVerse presentation and the informative sales content.
+The fictional PickleRVerse venue drives the visual system: court blue, apron lime, fence navy, sky, concrete, and foliage tones are reused across the player, booking, booking-management, and Court Staff views. V1.3 keeps that environment-led direction while tightening alignment and pushing the motion system further.
 
-Key UX choices:
-- Player browsing uses a labeled mobile nav: Venue / Book / My booking.
-- Booking shows every court in one compact schedule with A / B / R / M / ✓ status codes.
-- Checkout uses a simple Step X of 4 progress bar and a sticky booking cart.
-- Payment total appears before the payment choices on mobile.
-- Court Staff uses a labeled bottom navigation instead of a cramped horizontal tab strip.
-- Staff schedule uses the same A / B / R / M visual language as the public schedule.
-- Settings are grouped into expandable sections and keep Save changes within reach on mobile.
+Key UX and visual choices:
+- Replaced the square-background rally media with transparent, court-friendly paddle and pickleball assets.
+- Added a branded route-progress treatment where the pickleball itself travels as the loading slider.
+- Rebuilt the PickleRVerse lockup from a separately animated mark and wordmark so the paddle mark can kick, orbit, spark, and catch a controlled sheen.
+- Refined hero rally timing with coordinated paddle swings, impact rings, speed trails, and cleaner scroll/final-rally motion.
+- Normalized optical centering for filled buttons, pills, badges, action chips, and icon/text controls across player, booking, manage, and Court Staff screens.
+- The public venue uses a continuous rally motif: moving pickleball, paddle swings, court-line overlays, kinetic text, and scroll-reactive motion.
+- Venue photography is the palette source, so the interface blends with the fictional physical court instead of feeling like a separate SaaS template.
+- Player browsing keeps the labeled mobile nav: Venue / Book / My booking.
+- Booking keeps every court in one compact schedule with A / B / R / M / ✓ status codes and uses the same venue-derived palette.
+- Checkout still uses a simple Step X of 4 progress bar and a sticky booking cart.
+- Court Staff keeps the same schedule language and inherits the venue palette without adding distracting motion to operational screens.
+- Motion respects reduced-motion preferences, and core booking actions remain obvious without animation.
 - Sales-page guides, pricing details, FAQs, and product explanations remain available.
 
 ## Run locally
