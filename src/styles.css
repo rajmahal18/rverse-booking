@@ -297,7 +297,7 @@
 .court-brand-image{min-width:168px;display:flex;align-items:center}
 .court-brand-image .prv-brand-lockup{width:168px}
 .booking-brand .prv-brand-lockup{width:150px}
-.demo-bar-mark{width:24px!important;height:24px!important;border-radius:7px;background:#e9e6db;padding:2px}
+.demo-bar-mark{width:24px!important;height:24px!important;border-radius:7px;padding:2px}
 
 /* Role gateway carries the sample client's identity before entry. */
 .role-brand{width:160px;margin:0 0 20px}
@@ -362,13 +362,13 @@
 .custom-court-choice-list button>span:nth-child(2){display:grid;gap:4px}.custom-court-choice-list button>span:last-child{justify-self:end}
 .booking-summary-brand{display:flex;align-items:center;justify-content:space-between;margin:-5px 0 18px;padding-bottom:14px;border-bottom:1px solid var(--prv-line)}
 .booking-summary-brand .prv-brand-mark{width:38px;height:38px}.booking-summary-brand>span{font-size:7px!important;text-transform:uppercase;letter-spacing:.13em;color:#717991!important}
-.checkout-brand{display:flex;align-items:center;gap:9px;margin-bottom:18px}.checkout-brand .prv-brand-mark{width:32px;height:32px;background:#e9e6db;border-radius:8px;padding:2px}.checkout-brand>span{color:white!important;font-size:8px!important;font-weight:800}
+.checkout-brand{display:flex;align-items:center;gap:9px;margin-bottom:18px}.checkout-brand .prv-brand-mark{width:32px;height:32px;border-radius:8px;padding:2px}.checkout-brand>span{color:white!important;font-size:8px!important;font-weight:800}
 .complete-brand{margin:0 auto 22px;width:190px}.complete-brand .prv-brand-lockup{width:190px}
 .confirmation-venue{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin:18px auto 0;color:#727991;font-size:8px}
 .confirmation-venue span+span:before{content:"·";margin-right:18px;color:#9ea3b4}
 
 /* Court Staff still looks like the same PickleRVerse business. */
-.admin-brand-custom .prv-brand-mark{width:42px;height:42px;background:#e9e6db;border-radius:10px;padding:2px}
+.admin-brand-custom .prv-brand-mark{width:42px;height:42px;border-radius:10px;padding:2px}
 .admin-venue-banner{min-height:210px;border-radius:18px;overflow:hidden;background:#132a4e;position:relative;margin-bottom:18px;color:white}
 .admin-venue-banner>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 48%;opacity:.5}
 .admin-venue-banner:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(16,26,58,.92),rgba(16,26,58,.5),rgba(16,26,58,.08))}
@@ -413,8 +413,8 @@
   .custom-court-choice-list button{grid-template-columns:24px 1fr!important}.custom-court-choice-list button>span:last-child{grid-column:2;justify-self:start}.custom-court-choice-list button>b{width:22px;height:22px}
   .confirmation-venue{display:grid;gap:5px}.confirmation-venue span+span:before{display:none}
 }
-.proof-brand{display:flex;align-items:center;gap:9px;margin-bottom:18px}.proof-brand .prv-brand-mark{width:32px;height:32px;background:#e9e6db;border-radius:8px;padding:2px}.proof-brand>span{font-size:8px!important;color:white!important;font-weight:850;text-transform:none!important;letter-spacing:0!important}
-.admin-proof-brand{display:flex;align-items:center;gap:8px;margin-bottom:14px}.admin-proof-brand .prv-brand-mark{width:30px;height:30px;background:#e9e6db;border-radius:7px;padding:2px}.admin-proof-brand>span{font-size:8px;color:#dce4fa;font-weight:800}
+.proof-brand{display:flex;align-items:center;gap:9px;margin-bottom:18px}.proof-brand .prv-brand-mark{width:32px;height:32px;border-radius:8px;padding:2px}.proof-brand>span{font-size:8px!important;color:white!important;font-weight:850;text-transform:none!important;letter-spacing:0!important}
+.admin-proof-brand{display:flex;align-items:center;gap:8px;margin-bottom:14px}.admin-proof-brand .prv-brand-mark{width:30px;height:30px;border-radius:7px;padding:2px}.admin-proof-brand>span{font-size:8px;color:#dce4fa;font-weight:800}
 
 /* =========================================================
    One-glance public schedule + multi-slot cart
@@ -1250,7 +1250,7 @@ button:disabled{cursor:not-allowed}
 .demo-bar{background:var(--prv-navy);color:var(--prv-paper)}
 .demo-dot{background:var(--prv-lime-bright);box-shadow:0 0 0 4px rgba(192,211,69,.14)}
 .demo-bar-actions a.active,.demo-bar-actions button.active{background:var(--prv-blue);color:white}
-.demo-bar-mark{background:var(--prv-paper)!important}
+
 
 /* Role chooser enters the same physical world instead of a generic app overlay. */
 .role-gateway{
