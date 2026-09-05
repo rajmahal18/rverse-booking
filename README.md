@@ -71,3 +71,12 @@ The demo uses `localStorage`. Player bookings and Court Staff changes share the 
 - Reclub/PickleRVerse Open Play platform branding
 - Fictional Philippine/BARMM-flavored open play clubs
 - Guided court-owner sales journey
+
+## V1.6 Scenery-led hero
+- Reworked the player-facing venue hero from a split text/card layout into one full-width scenic composition.
+- Uses the venue photo as the hero environment, with the courts/detail weighted to the right and a readability gradient creating intentional negative space for the copy on the left.
+- Keeps all headline, availability, and CTA content as real HTML rather than baking UI into the image.
+- The hero is a normal document section: the scenery scrolls away with it and does not remain fixed behind later sections.
+- Removed the old hero rally/paddle treatment and page-wide scroll ball so the first impression is calmer and more editorial.
+- Added an optimized WebP hero asset to reduce the image payload substantially versus the original PNG source.
+- Includes dedicated tablet and mobile composition rules so copy stays legible while the venue remains the visual anchor.

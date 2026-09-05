@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { Link } from 'react-router-dom'
 import DemoBar from '../components/DemoBar'
 import PickleRVerseBrand from '../components/PickleRVerseBrand'
@@ -11,81 +11,6 @@ import { makeDates, money, timeSlots, loadDemoState, isOccupied } from '../lib/d
 
 const courtCrop = ['18% center','50% center','82% center']
 const kineticWords = ['PLAY','BOOK','DINK','RESET','RALLY','REPEAT']
-
-function ScrollRallyBall() {
-  const reduceMotion = useReducedMotion()
-  const { scrollYProgress } = useScroll()
-  const top = useTransform(scrollYProgress, [0,.16,.33,.51,.7,.86,1], ['7%','18%','35%','53%','70%','83%','94%'])
-  const left = useTransform(scrollYProgress, [0,.16,.33,.51,.7,.86,1], ['82%','13%','86%','18%','78%','25%','11%'])
-  const rotate = useTransform(scrollYProgress, [0,1], [0,1080])
-  const scale = useTransform(scrollYProgress, [0,.2,.42,.66,.84,1], [.82,1.08,.9,1.12,.88,.78])
-  const opacity = useTransform(scrollYProgress, [0,.06,.9,1], [0,.34,.3,0])
-
-  return (
-    <motion.img
-      className="scroll-rally-ball"
-      src="/brand/pickleball.svg"
-      alt=""
-      aria-hidden="true"
-      style={reduceMotion ? { top:'13%', left:'84%' } : { top, left, rotate, scale, opacity }}
-    />
-  )
-}
-
-function HeroRally({ reduceMotion }: { reduceMotion: boolean }) {
-  const rallyTransition = { duration: 5.25, times: [0,.22,.29,.49,.67,.74,1], ease: [0.32,0.02,0.2,1] as const, repeat: Infinity, repeatDelay: .28 }
-
-  return (
-    <div className="hero-rally-scene" aria-hidden="true">
-      <motion.span
-        className="hero-rally-speed hero-rally-speed-one"
-        animate={reduceMotion ? undefined : { opacity:[0,.05,.8,0,0,0,0], scaleX:[.2,.4,1.2,.5,.2,.2,.2] }}
-        transition={rallyTransition}
-      />
-      <motion.span
-        className="hero-rally-speed hero-rally-speed-two"
-        animate={reduceMotion ? undefined : { opacity:[0,0,0,.08,.12,.85,0], scaleX:[.2,.2,.2,.4,.5,1.25,.35] }}
-        transition={rallyTransition}
-      />
-      <motion.span
-        className="hero-rally-impact hero-rally-impact-right"
-        animate={reduceMotion ? undefined : { opacity:[0,0,1,0,0,0,0], scale:[.25,.25,1.35,1.9,.25,.25,.25] }}
-        transition={rallyTransition}
-      />
-      <motion.span
-        className="hero-rally-impact hero-rally-impact-left"
-        animate={reduceMotion ? undefined : { opacity:[0,0,0,0,1,0,0], scale:[.25,.25,.25,.25,1.3,1.85,.25] }}
-        transition={rallyTransition}
-      />
-      <motion.img
-        className="hero-rally-ball"
-        src="/brand/pickleball.svg"
-        alt=""
-        animate={reduceMotion ? undefined : {
-          x: [0,260,490,420,115,24,0],
-          y: [0,-92,-28,42,154,112,0],
-          rotate: [0,135,285,420,650,770,930],
-          scale: [1,.9,.78,.94,.82,1.08,1],
-        }}
-        transition={rallyTransition}
-      />
-      <motion.img
-        className="hero-paddle hero-paddle-left"
-        src="/brand/paddle-cutout.webp"
-        alt=""
-        animate={reduceMotion ? undefined : { rotate:[-22,-22,-22,-18,-2,17,-22], x:[0,0,0,0,4,11,0], y:[0,0,0,0,-4,-11,0] }}
-        transition={rallyTransition}
-      />
-      <motion.img
-        className="hero-paddle hero-paddle-right"
-        src="/brand/paddle-cutout.webp"
-        alt=""
-        animate={reduceMotion ? undefined : { rotate:[19,19,-2,-15,19,19,19], x:[0,0,-8,-12,0,0,0], y:[0,0,3,8,0,0,0] }}
-        transition={rallyTransition}
-      />
-    </div>
-  )
-}
 
 export default function CourtHome() {
   const [state, setState] = useState(loadDemoState())
@@ -104,45 +29,38 @@ export default function CourtHome() {
 
   return (
     <div className="court-shell living-court-shell">
-      <ScrollRallyBall />
       <DemoBar />
-      <header className="court-nav living-court-nav">
-        <Link to="/demo" className="court-brand court-brand-image"><PickleRVerseBrand energy="active" /><span className="sr-only">PickleRVerse</span></Link>
-        <nav><a href="#courts">Courts</a><Link to="/demo/open-plays">Open play</Link><a href="#venue">Venue</a><a href="#visit">Before you book</a><Link className="court-manage-link" to="/demo/manage">My booking</Link><Link className="court-book-small" to="/demo/book">Book a court</Link></nav>
-      </header>
 
       <main className="living-court-main">
-        <section className="court-hero court-hero-photo-layout living-court-hero">
-          <motion.div
-            className="court-hero-copy living-hero-copy"
-            initial={reduceMotion ? false : { opacity:0, y:24 }}
-            animate={{ opacity:1, y:0 }}
-            transition={{ duration:.58, ease:[.2,.8,.2,1] }}
-          >
-            <span className="court-kicker living-kicker"><i /> {venue.locationLabel} · {venue.hours}</span>
-            <h1><span>This is</span><br/><em>your court.</em></h1>
-            <p>{venue.description} Book in seconds, see every court-hour clearly, then just show up and play.</p>
-            <div className="court-hero-actions"><Link className="court-main-cta" to="/demo/book">Book a court <Arrow /></Link><Link to="/demo/manage" className="court-secondary-cta">Find my booking</Link></div>
-            <div className="hero-live-readout" aria-label="Today's demo availability">
-              <span><i /> Live demo schedule</span>
-              <strong>{openCourtHours}</strong>
-              <small>court-hours open today</small>
-            </div>
-          </motion.div>
+        <section className="scenic-court-hero">
+          <div className="scenic-hero-media" aria-hidden="true">
+            <img src="/hero.png" alt="" width="1672" height="941" fetchPriority="high" />
+          </div>
 
-          <motion.figure
-            className="court-photo-card living-venue-card"
-            initial={reduceMotion ? false : { opacity:0, scale:.975, clipPath:'inset(0 0 14% 0 round 24px)' }}
-            animate={{ opacity:1, scale:1, clipPath:'inset(0 0 0% 0 round 24px)' }}
-            transition={{ duration:.72, delay:.08, ease:[.2,.8,.2,1] }}
-            whileHover={reduceMotion ? undefined : { y:-5, rotate:.15 }}
-          >
-            <img src="/brand/picklerverse-venue.webp" alt="PickleRVerse venue with Orbit, Nova, and Comet courts" />
-            <HeroRally reduceMotion={reduceMotion} />
-            <div className="venue-photo-lines" aria-hidden="true"><span/><span/><span/></div>
-            <div className="hero-court-badge"><span>COURT MODE</span><strong>ON</strong></div>
-            <figcaption><span>PickleRVerse</span><strong>Orbit · Nova · Comet</strong><small>Open-air courts · {venue.locationLabel}</small></figcaption>
-          </motion.figure>
+          <header className="court-nav living-court-nav">
+            <Link to="/demo" className="court-brand court-brand-image"><PickleRVerseBrand energy="active" /><span className="sr-only">PickleRVerse</span></Link>
+            <nav><a href="#courts">Courts</a><Link to="/demo/open-plays">Open play</Link><a href="#venue">Venue</a><a href="#visit">Before you book</a><Link className="court-manage-link" to="/demo/manage">My booking</Link><Link className="court-book-small" to="/demo/book">Book a court</Link></nav>
+          </header>
+
+          <div className="scenic-hero-inner">
+            <motion.div
+              className="court-hero-copy living-hero-copy scenic-hero-copy"
+              initial={reduceMotion ? false : { opacity:0, y:24 }}
+              animate={{ opacity:1, y:0 }}
+              transition={{ duration:.58, delay:.08, ease:[.2,.8,.2,1] }}
+            >
+              <span className="court-kicker living-kicker"><i /> {venue.locationLabel} · {venue.hours}</span>
+              <h1><span>This is</span><br/><em>your court.</em></h1>
+              <p>{venue.description} Book in seconds, see every court-hour clearly, then just show up and play.</p>
+              <div className="court-hero-actions"><Link className="court-main-cta" to="/demo/book">Book a court <Arrow /></Link><Link to="/demo/manage" className="court-secondary-cta">Find my booking</Link></div>
+              <div className="hero-live-readout" aria-label="Today's demo availability">
+                <span><i /> Live demo schedule</span>
+                <strong>{openCourtHours}</strong>
+                <small>court-hours open today</small>
+              </div>
+            </motion.div>
+
+          </div>
         </section>
 
         <section className="kinetic-court-strip" aria-label="PickleRVerse motion banner">
