@@ -11,6 +11,16 @@ import { bookingTimes, getCourt, loadDemoState, makeDates, makeReference, money,
 const steps = ['Schedule','Details','Payment','Confirmation']
 const slotKey = (courtId:string,time:string) => `${courtId}|${time}`
 
+function slotTimeRange(time: string) {
+  const [clock, period] = time.split(' ')
+  const [hour, minute] = clock.split(':').map(Number)
+  const endHour24 = ((hour % 12) + (period === 'PM' ? 12 : 0) + 1) % 24
+  const endPeriod = endHour24 >= 12 ? 'PM' : 'AM'
+  const minutes = minute ? `:${String(minute).padStart(2, '0')}` : ''
+  const start = `${hour}${minutes}${period === endPeriod ? '' : ` ${period}`}`
+  return `${start}–${endHour24 % 12 || 12}${minutes} ${endPeriod}`
+}
+
 function dateISO(offset = 0) {
   const d = new Date()
   d.setHours(12,0,0,0)
@@ -273,7 +283,7 @@ export default function BookingFlow() {
                 {state.courts.map(court=><div className="public-matrix-head" key={court.id}><strong>{court.shortName}</strong><small>{money(court.rate)}/hr</small></div>)}
                 {timeSlots.map(time => (
                   <div className="public-matrix-row" key={time}>
-                    <div className="matrix-time"><strong>{time.replace(':00','')}</strong></div>
+                    <div className="matrix-time"><strong>{slotTimeRange(time)}</strong></div>
                     {state.courts.map(court => {
                       const cell = cellState(court.id,time)
                       return <motion.button
