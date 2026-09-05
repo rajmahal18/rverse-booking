@@ -6,6 +6,8 @@ import CourtHome from './pages/CourtHome'
 import BookingFlow from './pages/BookingFlow'
 import AdminDemo from './pages/AdminDemo'
 import BookingManage from './pages/BookingManage'
+import OpenPlayList from './pages/OpenPlayList'
+import OpenPlayDetail from './pages/OpenPlayDetail'
 import DemoRoleChooser from './components/DemoRoleChooser'
 import RallyRouteLoader from './components/RallyRouteLoader'
 import { getDemoRole, type DemoRole } from './lib/demoRole'
@@ -48,6 +50,8 @@ export default function App() {
             <Route path="/demo/book" element={<DemoGate><BookingFlow /></DemoGate>} />
             <Route path="/demo/admin" element={<DemoGate><AdminDemo /></DemoGate>} />
             <Route path="/demo/manage" element={<DemoGate><BookingManage /></DemoGate>} />
+            <Route path="/demo/open-plays" element={<DemoGate><OpenPlayList /></DemoGate>} />
+            <Route path="/demo/open-plays/:id" element={<DemoGate><OpenPlayDetail /></DemoGate>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </motion.div>

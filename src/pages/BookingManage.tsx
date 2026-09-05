@@ -76,7 +76,7 @@ export default function BookingManage() {
   }
 
   const total = matches.reduce((sum,item)=>sum+item.amount,0)
-  const status = matches.length && matches.every(item=>item.paymentStatus==='Paid') ? 'Paid' : matches.some(item=>item.paymentStatus==='Pending review') ? 'Reserved' : 'Unpaid'
+  const status = matches.length && matches.every(item=>item.paymentStatus==='Paid') ? 'Paid' : 'Unpaid'
   const first = matches[0]
 
   return (

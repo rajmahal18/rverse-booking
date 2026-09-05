@@ -1,5 +1,34 @@
-export type PaymentStatus = 'Paid' | 'Pending review' | 'Unpaid'
+export type PaymentStatus = 'Paid' | 'Unpaid'
 export type BookingSource = 'Public' | 'Staff'
+export type OpenPlayHostType = 'Court-hosted' | 'Reclub'
+
+export type OpenPlayConfig = {
+  id: string
+  title: string
+  hostType: OpenPlayHostType
+  organizer: string
+  date: string
+  startTime: string
+  endTime: string
+  skillLevel: string
+  format: string
+  courtIds: string[]
+  maxPlayers: number
+  registered: number
+  price: number
+  summary: string
+  description: string
+  whoCanJoin: string
+  whatToBring: string
+  equipment: string
+  checkIn: string
+  cancellation: string
+  contact: string
+  tags: string[]
+  externalUrl?: string
+  published: boolean
+  featured?: boolean
+}
 
 export type CourtConfig = {
   id: string
@@ -57,6 +86,7 @@ export type DemoState = {
   blocked: string[]
   courts: CourtConfig[]
   venue: VenueConfig
+  openPlays: OpenPlayConfig[]
 }
 
 export const defaultVenue: VenueConfig = {
@@ -73,7 +103,7 @@ export const defaultVenue: VenueConfig = {
   social: '@PickleRVerse',
   paymentName: 'PickleRVerse Sports',
   paymentNumber: '0917 808 7787',
-  paymentInstructions: 'Use your booking reference as the payment note. Manual proof uploads stay reserved until Court Staff verifies them.',
+  paymentInstructions: 'Public bookings are confirmed only after successful online payment. Staff-created walk-ins or phone bookings are handled separately in Court Staff.',
   amenities: ['Free parking', 'Paddle rental', 'Waiting lounge', 'Comfort room', 'Water station', 'Night lighting'],
   rules: [
     'Arrive 10 minutes before your schedule.',
@@ -135,6 +165,116 @@ function dateISO(offset = 0) {
   return d.toISOString().slice(0,10)
 }
 
+function makeOpenPlays(): OpenPlayConfig[] {
+  return [
+    {
+      id: 'saturday-social',
+      title: 'Saturday Social Open Play',
+      hostType: 'Court-hosted',
+      organizer: 'IslamDink Pickleball Club',
+      date: dateISO(1),
+      startTime: '6:00 PM',
+      endTime: '9:00 PM',
+      skillLevel: 'Beginner–Intermediate · 2.5–3.5',
+      format: 'Social rotation · mixed doubles',
+      courtIds: ['orbit','nova','comet'],
+      maxPlayers: 24,
+      registered: 17,
+      price: 200,
+      summary: 'Come solo or with friends. IslamDink runs the rotations while registration stays inside PickleRVerse.',
+      description: 'A relaxed three-hour community session built for players who want steady games without booking a full court. Players rotate after each game, and the court team keeps groups moving across all three courts.',
+      whoCanJoin: 'Players comfortable with basic scoring and rally play. No partner is required; solo players are welcome.',
+      whatToBring: 'Court shoes, water, and your paddle if you have one. Arrive ready to warm up before the first rotation.',
+      equipment: 'Limited loaner paddles are available at check-in. Balls are provided by the host.',
+      checkIn: 'Check in at the front desk from 5:40 PM. First rotation starts at 6:00 PM.',
+      cancellation: 'Please message the court at least 6 hours before the session if you can no longer attend.',
+      contact: 'IslamDink coordinator via PickleRVerse court desk · 0917 808 7787',
+      tags: ['No partner needed','Rotation play','Paddles available'],
+      published: true,
+      featured: true,
+    },
+    {
+      id: 'after-work-dinks',
+      title: 'After-Work Dinks',
+      hostType: 'Court-hosted',
+      organizer: 'Cotabato Kitchen Club',
+      date: dateISO(3),
+      startTime: '7:00 PM',
+      endTime: '9:00 PM',
+      skillLevel: 'Intermediate · 3.0–4.0',
+      format: 'Fast rotation · rally-focused doubles',
+      courtIds: ['orbit','nova'],
+      maxPlayers: 16,
+      registered: 11,
+      price: 180,
+      summary: 'A quick after-work session by Cotabato Kitchen Club for players who want competitive-but-social games.',
+      description: 'Two courts run continuous doubles rotations with short breaks between games. Pairings change throughout the session to keep matchups varied and the pace moving.',
+      whoCanJoin: 'Intermediate players who can serve, keep score, and sustain rallies. You can join without a partner.',
+      whatToBring: 'Court shoes, water, and a paddle. Light snacks and extra water are available at the lounge.',
+      equipment: 'Balls are included. A small number of rental paddles are available while supplies last.',
+      checkIn: 'Check in by 6:50 PM. Warm-up space opens at 6:40 PM.',
+      cancellation: 'Cancellations made 6+ hours before play may be moved to another court-hosted open play.',
+      contact: 'Cotabato Kitchen Club via PickleRVerse court desk · 0917 808 7787',
+      tags: ['Weeknight','Intermediate','No fixed partner'],
+      published: true,
+      featured: true,
+    },
+    {
+      id: 'reclub-sunday-rally',
+      title: 'Sunday Community Rally',
+      hostType: 'Reclub',
+      organizer: 'Sultan Smash Club',
+      date: dateISO(5),
+      startTime: '4:00 PM',
+      endTime: '7:00 PM',
+      skillLevel: 'All levels · grouped by play level',
+      format: 'Community open play · organizer-managed',
+      courtIds: ['orbit','nova','comet'],
+      maxPlayers: 28,
+      registered: 21,
+      price: 220,
+      summary: 'Sultan Smash Club hosts this community session at PickleRVerse. Registration and roster updates continue on Reclub.',
+      description: 'Sultan Smash Club organizes this session at PickleRVerse. The listing shows the practical event details at a glance, while registration, roster updates, and organizer announcements are handled on Reclub.',
+      whoCanJoin: 'Open to players of all levels. The organizer groups players by level on the event roster.',
+      whatToBring: 'Court shoes, water, paddle, and your Reclub confirmation.',
+      equipment: 'Venue paddle rental remains available separately from event registration.',
+      checkIn: 'Follow the organizer check-in instructions shown on Reclub.',
+      cancellation: 'Cancellation and refund rules are controlled by the Reclub event organizer.',
+      contact: 'See organizer contact details on Reclub.',
+      tags: ['Community-hosted','All levels','Reclub registration'],
+      externalUrl: 'https://reclub.co/',
+      published: true,
+      featured: true,
+    },
+    {
+      id: 'reclub-rookie-night',
+      title: 'Rookie Night',
+      hostType: 'Reclub',
+      organizer: 'Ranao Rally Club',
+      date: dateISO(7),
+      startTime: '6:30 PM',
+      endTime: '8:30 PM',
+      skillLevel: 'Beginner · 2.0–3.0',
+      format: 'Guided games · beginner rotations',
+      courtIds: ['nova','comet'],
+      maxPlayers: 18,
+      registered: 9,
+      price: 160,
+      summary: 'Ranao Rally Club runs beginner-friendly games with guided rotations. Registration is managed on Reclub.',
+      description: 'A lower-pressure session for newer players who want structured games and help getting comfortable with rotation play.',
+      whoCanJoin: 'New and developing players. No partner required.',
+      whatToBring: 'Court shoes and water. A paddle is recommended but rentals are available.',
+      equipment: 'Rental paddles and balls are available at the venue.',
+      checkIn: 'See the Reclub event page for roster and arrival instructions.',
+      cancellation: 'Organizer policy on Reclub applies.',
+      contact: 'See organizer contact details on Reclub.',
+      tags: ['Beginner-friendly','Guided play','Reclub registration'],
+      externalUrl: 'https://reclub.co/',
+      published: true,
+    },
+  ]
+}
+
 export function makeDates(count = 7) {
   return Array.from({ length: count }, (_, i) => {
     const d = new Date()
@@ -155,7 +295,7 @@ function seedState(): DemoState {
     bookings: [
       { id: 'PRV-2048', groupId:'PRV-2048', customer: 'Mia Santos', phone: '0917 555 0148', courtId: 'orbit', courtName: 'Orbit Court', date: dateISO(0), time: '6:00 PM', duration: 1, amount: 360, paymentMethod: 'GCash', paymentStatus: 'Paid', source: 'Public', createdAt: new Date().toISOString() },
       { id: 'PRV-2048-02', groupId:'PRV-2048', customer: 'Mia Santos', phone: '0917 555 0148', courtId: 'orbit', courtName: 'Orbit Court', date: dateISO(0), time: '7:00 PM', duration: 1, amount: 360, paymentMethod: 'GCash', paymentStatus: 'Paid', source: 'Public', createdAt: new Date().toISOString() },
-      { id: 'PRV-2049', groupId:'PRV-2049', customer: 'Anton Cruz', phone: '0918 222 1044', courtId: 'nova', courtName: 'Nova Court', date: dateISO(0), time: '4:00 PM', duration: 1, amount: 330, paymentMethod: 'Manual proof', paymentStatus: 'Pending review', source: 'Public', proofName: 'gcash-proof-2049.jpg', createdAt: new Date().toISOString() },
+      { id: 'PRV-2049', groupId:'PRV-2049', customer: 'Anton Cruz', phone: '0918 222 1044', courtId: 'nova', courtName: 'Nova Court', date: dateISO(0), time: '4:00 PM', duration: 1, amount: 330, paymentMethod: 'Maya', paymentStatus: 'Paid', source: 'Public', createdAt: new Date().toISOString() },
       { id: 'PRV-2050', groupId:'PRV-2050', customer: 'Jules Reyes', phone: '0919 883 2201', courtId: 'comet', courtName: 'Comet Court', date: dateISO(1), time: '8:00 AM', duration: 1, amount: 300, paymentMethod: 'Cash', paymentStatus: 'Unpaid', source: 'Staff', createdAt: new Date().toISOString() },
     ],
     blocked: [`${dateISO(0)}|orbit|9:00 PM`, `${dateISO(1)}|nova|1:00 PM`],
@@ -166,6 +306,7 @@ function seedState(): DemoState {
       rules: [...defaultVenue.rules],
       nearby: [...defaultVenue.nearby],
     },
+    openPlays: makeOpenPlays(),
   }
 }
 
@@ -176,7 +317,11 @@ function normalizeState(value: Partial<DemoState> | null | undefined): DemoState
     ? defaultCourts.map((fallback) => ({ ...fallback, ...(value.courts!.find((court) => court.id === fallback.id) || {}) }))
     : seeded.courts
   return {
-    bookings: Array.isArray(value.bookings) ? value.bookings : seeded.bookings,
+    bookings: Array.isArray(value.bookings)
+      ? value.bookings
+          .filter((booking) => !(booking.source === 'Public' && (booking as { paymentStatus:string }).paymentStatus === 'Pending review'))
+          .map((booking) => ({ ...booking, paymentStatus: ((booking as { paymentStatus:string }).paymentStatus === 'Pending review' ? 'Unpaid' : booking.paymentStatus) as PaymentStatus }))
+      : seeded.bookings,
     blocked: Array.isArray(value.blocked) ? value.blocked : seeded.blocked,
     courts: configuredCourts,
     venue: {
@@ -186,6 +331,12 @@ function normalizeState(value: Partial<DemoState> | null | undefined): DemoState
       rules: Array.isArray(value.venue?.rules) ? value.venue!.rules : seeded.venue.rules,
       nearby: Array.isArray(value.venue?.nearby) ? value.venue!.nearby : seeded.venue.nearby,
     },
+    openPlays: Array.isArray(value.openPlays)
+      ? seeded.openPlays.map((fallback) => {
+          const stored = value.openPlays!.find((item) => item.id === fallback.id)
+          return stored ? { ...fallback, published: stored.published } : fallback
+        })
+      : seeded.openPlays,
   }
 }
 
@@ -257,4 +408,12 @@ export function makeReference(state: DemoState) {
     return Math.max(n, match ? Number(match[1]) : 2050)
   }, 2050)
   return `PRV-${max + 1}`
+}
+
+export function getOpenPlay(state: DemoState, id: string) {
+  return state.openPlays.find((openPlay) => openPlay.id === id)
+}
+
+export function openPlaySpotsLeft(openPlay: OpenPlayConfig) {
+  return Math.max(0, openPlay.maxPlayers - openPlay.registered)
 }

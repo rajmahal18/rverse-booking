@@ -5,6 +5,7 @@ import DemoBar from '../components/DemoBar'
 import PickleRVerseBrand from '../components/PickleRVerseBrand'
 import VenueMap from '../components/VenueMap'
 import PlayerMobileNav from '../components/PlayerMobileNav'
+import OpenPlayCard from '../components/OpenPlayCard'
 import { Arrow, CalendarIcon, ClockIcon, MapPinIcon } from '../components/Icons'
 import { makeDates, money, timeSlots, loadDemoState, isOccupied } from '../lib/demoStore'
 
@@ -99,6 +100,7 @@ export default function CourtHome() {
   const today = makeDates(1)[0]
   const openSlots = timeSlots.filter((time) => !isOccupied(state, today.iso, 'orbit', time)).slice(0,4)
   const openCourtHours = courts.reduce((total, court) => total + timeSlots.filter((time) => !isOccupied(state, today.iso, court.id, time)).length, 0)
+  const featuredOpenPlays = state.openPlays.filter(item => item.published && item.featured).slice(0,3)
 
   return (
     <div className="court-shell living-court-shell">
@@ -106,7 +108,7 @@ export default function CourtHome() {
       <DemoBar />
       <header className="court-nav living-court-nav">
         <Link to="/demo" className="court-brand court-brand-image"><PickleRVerseBrand energy="active" /><span className="sr-only">PickleRVerse</span></Link>
-        <nav><a href="#courts">Courts</a><a href="#venue">Venue</a><a href="#visit">Before you book</a><Link className="court-manage-link" to="/demo/manage">My booking</Link><Link className="court-book-small" to="/demo/book">Book a court</Link></nav>
+        <nav><a href="#courts">Courts</a><Link to="/demo/open-plays">Open play</Link><a href="#venue">Venue</a><a href="#visit">Before you book</a><Link className="court-manage-link" to="/demo/manage">My booking</Link><Link className="court-book-small" to="/demo/book">Book a court</Link></nav>
       </header>
 
       <main className="living-court-main">
@@ -181,24 +183,30 @@ export default function CourtHome() {
           </div>
         </section>
 
+        <section className="home-open-play-section" id="open-play">
+          <div className="home-open-play-head"><div><span>02 · Open play</span><h2>No group? No problem.</h2><p>Join an organized session, see exactly who it is for, and know where registration happens before you commit.</p></div><Link to="/demo/open-plays">See all open plays <Arrow/></Link></div>
+          <div className="home-open-play-grid">{featuredOpenPlays.map(openPlay => <OpenPlayCard key={openPlay.id} openPlay={openPlay} compact />)}</div>
+          <div className="home-open-play-note"><span>COURT-HOSTED</span><p>Open the full event page here in RVerse.</p><span>RECLUB-HOSTED</span><p>See the key details here, then continue to Reclub for organizer-managed registration.</p></div>
+        </section>
+
         <section className="venue-gallery living-venue-gallery" aria-label="PickleRVerse venue gallery">
-          <div className="venue-gallery-head"><span>02 · Around the club</span><h2>Bright courts. Open air. Easy game-day energy.</h2></div>
+          <div className="venue-gallery-head"><span>03 · Around the club</span><h2>Bright courts. Open air. Easy game-day energy.</h2></div>
           <div className="venue-gallery-grid living-gallery-grid">
-            <motion.figure className="gallery-wide" initial={reduceMotion?false:{opacity:0,y:26}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.55}}><img src="/brand/picklerverse-venue.webp" alt="Front view of PickleRVerse"/><figcaption>Entrance · check-in · waiting area</figcaption></motion.figure>
-            <motion.figure initial={reduceMotion?false:{opacity:0,y:36}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.55,delay:.08}}><img src="/brand/picklerverse-aerial.webp" alt="Aerial view of PickleRVerse"/><figcaption>Three-court layout</figcaption></motion.figure>
-            <motion.figure className="gallery-court-crop" initial={reduceMotion?false:{opacity:0,y:42}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.55,delay:.14}}><img src="/brand/picklerverse-aerial.webp" alt="Orbit, Nova and Comet courts"/><figcaption>Orbit · Nova · Comet</figcaption></motion.figure>
+            <motion.figure className="gallery-wide" initial={reduceMotion?false:{opacity:0,y:26}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.55}}><img src="/otherangle.png" alt="Alternate view of PickleRVerse courts, check-in area, and waiting seats" loading="lazy"/><figcaption>Courts · check-in · waiting area</figcaption></motion.figure>
+            <motion.figure initial={reduceMotion?false:{opacity:0,y:36}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.55,delay:.08}}><img src="/parking.png" alt="On-site parking directly in front of PickleRVerse" loading="lazy"/><figcaption>Free on-site parking</figcaption></motion.figure>
+            <motion.figure className="gallery-court-crop" initial={reduceMotion?false:{opacity:0,y:42}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.55,delay:.14}}><img src="/brand/picklerverse-aerial.webp" alt="Orbit, Nova and Comet courts" loading="lazy"/><figcaption>Orbit · Nova · Comet</figcaption></motion.figure>
           </div>
         </section>
 
         <section className="venue-location-section living-location-section" id="venue">
-          <div className="venue-location-head"><span><MapPinIcon/> 03 · Visit PickleRVerse</span><h2>Find the gate, parking, and nearby landmarks.</h2></div>
+          <div className="venue-location-head"><span><MapPinIcon/> 04 · Visit PickleRVerse</span><h2>Find the gate, parking, and nearby landmarks.</h2></div>
           <VenueMap venue={venue}/>
         </section>
 
         <section className="venue-story living-venue-story">
           <motion.div className="venue-aerial" initial={reduceMotion?false:{opacity:0,x:-24}} whileInView={{opacity:1,x:0}} viewport={{once:true,amount:.25}} transition={{duration:.6}}><img src="/brand/picklerverse-aerial.webp" alt="Aerial layout of the three PickleRVerse courts" /><span>Venue layout · 3 courts</span><img className="story-ball" src="/brand/pickleball.svg" alt="" aria-hidden="true" /></motion.div>
           <motion.div className="venue-story-copy" initial={reduceMotion?false:{opacity:0,x:24}} whileInView={{opacity:1,x:0}} viewport={{once:true,amount:.25}} transition={{duration:.6}}>
-            <span>04 · On site</span>
+            <span>05 · On site</span>
             <h2>Everything you need for a regular court session.</h2>
             <p>{venue.landmark}. Contact the desk at {venue.phone} or {venue.social} if you need help before your schedule.</p>
             <div className="amenity-chips">{venue.amenities.map(item=><span key={item}>{item}</span>)}</div>
@@ -207,11 +215,11 @@ export default function CourtHome() {
         </section>
 
         <section className="court-rules living-court-rules" id="visit">
-          <div><span>05 · Before you book</span><h2>Know the practical stuff first.</h2><div className="rules-motion-mark" aria-hidden="true"><i/><i/><i/></div></div>
+          <div><span>06 · Before you book</span><h2>Know the practical stuff first.</h2><div className="rules-motion-mark" aria-hidden="true"><i/><i/><i/></div></div>
           <div>
             <div className="rules-list rules-list-custom">
               <div><ClockIcon/><span><strong>{venue.hours}</strong><small>Open every day</small></span></div>
-              <div><span className="rule-symbol">₱</span><span><strong>Online or manual payment</strong><small>{venue.paymentInstructions}</small></span></div>
+              <div><span className="rule-symbol">₱</span><span><strong>Pay online to confirm</strong><small>{venue.paymentInstructions}</small></span></div>
               <div><span className="rule-symbol">↻</span><span><strong>Booking changes</strong><small>Use My booking to view status, reschedule a slot, or cancel the booking.</small></span></div>
             </div>
             <div className="house-rules-list">{venue.rules.map((rule,i)=><div key={rule}><span>{String(i+1).padStart(2,'0')}</span><p>{rule}</p></div>)}</div>

@@ -2,24 +2,19 @@
 
 Vite + React + TypeScript sales site and interactive fictional court demo.
 
-## V1.3 Living Court polish
+## V1.4 Open Play patch
 
-The fictional PickleRVerse venue drives the visual system: court blue, apron lime, fence navy, sky, concrete, and foliage tones are reused across the player, booking, booking-management, and Court Staff views. V1.3 keeps that environment-led direction while tightening alignment and pushing the motion system further.
+V1.4 adds Open Play as a first-class part of the fictional PickleRVerse venue while preserving the existing booking, payment, staff, and environment-led visual system.
 
-Key UX and visual choices:
-- Replaced the square-background rally media with transparent, court-friendly paddle and pickleball assets.
-- Added a branded route-progress treatment where the pickleball itself travels as the loading slider.
-- Rebuilt the PickleRVerse lockup from a separately animated mark and wordmark so the paddle mark can kick, orbit, spark, and catch a controlled sheen.
-- Refined hero rally timing with coordinated paddle swings, impact rings, speed trails, and cleaner scroll/final-rally motion.
-- Normalized optical centering for filled buttons, pills, badges, action chips, and icon/text controls across player, booking, manage, and Court Staff screens.
-- The public venue uses a continuous rally motif: moving pickleball, paddle swings, court-line overlays, kinetic text, and scroll-reactive motion.
-- Venue photography is the palette source, so the interface blends with the fictional physical court instead of feeling like a separate SaaS template.
-- Player browsing keeps the labeled mobile nav: Venue / Book / My booking.
-- Booking keeps every court in one compact schedule with A / B / R / M / ✓ status codes and uses the same venue-derived palette.
-- Checkout still uses a simple Step X of 4 progress bar and a sticky booking cart.
-- Court Staff keeps the same schedule language and inherits the venue palette without adding distracting motion to operational screens.
-- Motion respects reduced-motion preferences, and core booking actions remain obvious without animation.
-- Sales-page guides, pricing details, FAQs, and product explanations remain available.
+Key changes:
+- Added a public Open Play hub with clear host filters and informative event cards.
+- Court-hosted sessions open a full RVerse event page with skill level, format, capacity, fee, courts, check-in, equipment, cancellation, parking, and contact details.
+- Reclub-hosted sessions are clearly labeled and continue to Reclub for organizer-managed registration instead of pretending the registration happens inside RVerse.
+- Added an Open Play section to the venue homepage and a fourth item to the player mobile navigation.
+- Added a Court Staff Open Plays tab with publish/hide controls and links to the public or external event destination.
+- Added Open Play state normalization so older saved demo state still receives the new seeded event data.
+- Integrated `public/otherangle.png` and `public/parking.png` into the venue gallery so the new photography explains the venue rather than acting as decoration.
+- Kept the background treatment intentionally quiet; no decorative pattern layer was introduced.
 
 ## Run locally
 
@@ -42,6 +37,8 @@ npm run preview
 - `/demo` — PickleRVerse player-facing venue
 - `/demo/book` — booking simulation
 - `/demo/manage` — booking lookup and management
+- `/demo/open-plays` — upcoming Open Play listings
+- `/demo/open-plays/:id` — full court-hosted Open Play details
 - `/demo/admin` — Court Staff workspace
 
 ## Deployment
@@ -63,3 +60,14 @@ npm run preview
 ## Demo state
 
 The demo uses `localStorage`. Player bookings and Court Staff changes share the same browser state. Use **Reset** in the demo bar to return to seeded PickleRVerse data.
+
+
+## V1.5 Part 2
+- Mobile-first public and sales UX pass
+- 62-day calendar booking window
+- Mobile cart rendering hardening
+- Public booking only after successful payment
+- Screenshot-friendly receipt + PNG receipt export
+- Reclub/PickleRVerse Open Play platform branding
+- Fictional Philippine/BARMM-flavored open play clubs
+- Guided court-owner sales journey

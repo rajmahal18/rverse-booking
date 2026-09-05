@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 import DemoBar from '../components/DemoBar'
 import PickleRVerseBrand from '../components/PickleRVerseBrand'
 import VenueMap from '../components/VenueMap'
-import { CalendarIcon, GridIcon, ListIcon, PlusIcon, SettingsIcon, WalletIcon, CheckIcon } from '../components/Icons'
+import { CalendarIcon, GridIcon, ListIcon, PlusIcon, SettingsIcon, WalletIcon, CheckIcon, UsersIcon, ExternalIcon } from '../components/Icons'
 import { bookingTimes, getCourt, isDurationAvailable, isOccupied, loadDemoState, makeDates, makeReference, money, saveDemoState, shortDate, timeSlots, type CourtConfig, type DemoBooking, type DemoState, type VenueConfig } from '../lib/demoStore'
 
-type Tab = 'overview'|'schedule'|'bookings'|'payments'|'settings'
+type Tab = 'overview'|'schedule'|'bookings'|'payments'|'openplays'|'settings'
 type SettingsDraft = { courts:CourtConfig[]; venue:VenueConfig }
 type VenueTextField = Exclude<keyof VenueConfig,'amenities'|'rules'|'nearby'>
 
@@ -46,20 +46,7 @@ export default function AdminDemo() {
 
   function update(next: DemoState) { setState(next); saveDemoState(next) }
   const dayBookings = useMemo(() => state.bookings.filter(b => b.date === date), [state,date])
-  const pendingCourtHours = state.bookings.filter(b => b.paymentStatus === 'Pending review')
-  const pendingGroups = useMemo(() => {
-    const groups = new Map<string, DemoBooking[]>()
-    pendingCourtHours.forEach((booking) => {
-      const reference = booking.groupId || booking.id
-      groups.set(reference, [...(groups.get(reference) || []), booking])
-    })
-    return Array.from(groups, ([reference, bookings]) => ({
-      reference,
-      bookings,
-      first: bookings[0],
-      total: bookings.reduce((sum, booking) => sum + booking.amount, 0),
-    }))
-  }, [state.bookings])
+  const unpaidStaffBookings = state.bookings.filter(b => b.source === 'Staff' && b.paymentStatus === 'Unpaid')
   const paidTotal = state.bookings.filter(b=>b.paymentStatus==='Paid').reduce((sum,b)=>sum+b.amount,0)
 
   function toggleBlock(courtId:string,time:string) {
@@ -70,13 +57,6 @@ export default function AdminDemo() {
     update({ ...state, blocked:nextBlocked })
   }
 
-  function verify(id:string) {
-    const target = state.bookings.find(b=>b.id===id)
-    const groupId = target?.groupId
-    const next = { ...state, bookings:state.bookings.map(b => (groupId ? b.groupId===groupId : b.id===id) ? {...b,paymentStatus:'Paid' as const} : b) }
-    update(next)
-    if (selected && (selected.id===id || (groupId && selected.groupId===groupId))) setSelected(next.bookings.find(b=>b.id===selected.id) || null)
-  }
 
   function createManual() {
     if (isOccupied(state,date,manualCourt,manualTime)) return
@@ -137,12 +117,15 @@ export default function AdminDemo() {
     window.setTimeout(()=>setSettingsSaved(false),2200)
   }
 
+  function toggleOpenPlayPublished(id:string) {
+    update({ ...state, openPlays:state.openPlays.map(item => item.id===id ? { ...item, published:!item.published } : item) })
+  }
+
   function slot(courtId:string,time:string) {
     const booking = dayBookings.find(b=>b.courtId===courtId && bookingTimes(b).includes(time))
     const blocked = state.blocked.includes(`${date}|${courtId}|${time}`)
     if (booking) {
-      const reserved = booking.paymentStatus === 'Pending review'
-      return <button className={`schedule-cell booked ${reserved?'pending':''}`} onClick={()=>setSelected(booking)} aria-label={`${booking.courtName}, ${time}: ${reserved?'Reserved':'Booked'} for ${booking.customer}`}><span className="staff-cell-code">{reserved?'R':'B'}</span><span className="staff-cell-copy"><strong>{booking.customer}</strong><small>{booking.paymentStatus}</small></span></button>
+      return <button className="schedule-cell booked" onClick={()=>setSelected(booking)} aria-label={`${booking.courtName}, ${time}: Booked for ${booking.customer}`}><span className="staff-cell-code">B</span><span className="staff-cell-copy"><strong>{booking.customer}</strong><small>{booking.paymentStatus}</small></span></button>
     }
     if (blocked) return <button className="schedule-cell blocked" onClick={()=>toggleBlock(courtId,time)} aria-label={`${time}: Blocked. Tap to reopen.`}><span className="staff-cell-code">M</span><span className="staff-cell-copy"><strong>Blocked</strong><small>Tap to reopen</small></span></button>
     return <button className="schedule-cell available" onClick={()=>toggleBlock(courtId,time)} aria-label={`${time}: Available. Tap to block.`}><span className="staff-cell-code">A</span><span className="staff-cell-copy"><strong>Available</strong><small>Tap to block</small></span></button>
@@ -158,28 +141,34 @@ export default function AdminDemo() {
             <button className={tab==='overview'?'active':''} onClick={()=>setTab('overview')}><GridIcon/><span>Overview</span></button>
             <button className={tab==='schedule'?'active':''} onClick={()=>setTab('schedule')}><CalendarIcon/><span>Schedule</span></button>
             <button className={tab==='bookings'?'active':''} onClick={()=>setTab('bookings')}><ListIcon/><span>Bookings</span></button>
-            <button className={tab==='payments'?'active':''} onClick={()=>setTab('payments')}><WalletIcon/><span>Payments</span> {pendingGroups.length>0&&<b>{pendingGroups.length}</b>}</button>
+            <button className={tab==='payments'?'active':''} onClick={()=>setTab('payments')}><WalletIcon/><span>Payments</span></button>
+            <button className={tab==='openplays'?'active':''} onClick={()=>setTab('openplays')}><UsersIcon/><span>Open plays</span></button>
             <button className={tab==='settings'?'active':''} onClick={()=>setTab('settings')}><SettingsIcon/><span>Settings</span></button>
           </nav>
           <div className="admin-sidebar-note"><span>PickleRVerse workspace</span><p>{state.venue.locationLabel}<br/>{state.venue.hours}</p></div>
         </aside>
 
         <main className="admin-content">
-          <header className="admin-top"><div><span>PickleRVerse · Court Staff · {state.venue.locationLabel}</span><h1>{tab==='settings'?'Venue & courts':tab[0].toUpperCase()+tab.slice(1)}</h1></div>{tab!=='settings'&&<button className="admin-primary" onClick={()=>setManualOpen(true)}><PlusIcon/><span>Add booking</span></button>}</header>
+          <header className="admin-top"><div><span>PickleRVerse · Court Staff · {state.venue.locationLabel}</span><h1>{tab==='settings'?'Venue & courts':tab==='openplays'?'Open plays':tab[0].toUpperCase()+tab.slice(1)}</h1></div>{tab!=='settings'&&tab!=='openplays'&&<button className="admin-primary" onClick={()=>setManualOpen(true)}><PlusIcon/><span>Add booking</span></button>}</header>
 
           {tab==='overview' && <div className="admin-view">
             <section className="admin-venue-banner"><img src="/brand/picklerverse-venue.webp" alt="PickleRVerse venue"/><div><PickleRVerseBrand/><span>{state.venue.address}</span><small>{state.venue.phone} · {state.venue.hours}</small></div></section>
-            <section className="admin-metrics"><article><span>Today’s court-hours</span><strong>{state.bookings.filter(b=>b.date===dates[0].iso).length}</strong><small>{state.courts.map(c=>c.shortName).join(' · ')}</small></article><article><span>Paid total</span><strong>{money(paidTotal)}</strong><small>Across demo bookings</small></article><article><span>Payment reviews</span><strong>{pendingGroups.length}</strong><small>{pendingCourtHours.length} reserved court-hour{pendingCourtHours.length!==1?'s':''}</small></article></section>
-            <section className="admin-panel"><div className="panel-head"><div><span>Today</span><h2>Courts at a glance</h2></div><button onClick={()=>setTab('schedule')}>Open schedule →</button></div><div className="overview-schedule"><div className="overview-schedule-head"><span>Peak hours</span>{timeSlots.slice(6,12).map(t=><small key={t}>{t.replace(':00 ',' ')}</small>)}</div>{state.courts.map(c=><div key={c.id}><span>{c.shortName}</span>{timeSlots.slice(6,12).map(t=>{const b=state.bookings.find(x=>x.date===dates[0].iso&&x.courtId===c.id&&bookingTimes(x).includes(t));const blocked=state.blocked.includes(`${dates[0].iso}|${c.id}|${t}`);return <i key={t} className={b?b.paymentStatus==='Pending review'?'pending':'busy':blocked?'blocked':''} title={`${t} · ${b?b.customer:blocked?'Blocked':'Available'}`}></i>})}</div>)}</div><div className="overview-key"><span><i></i>Available</span><span><i className="busy"></i>Booked</span><span><i className="pending"></i>Reserved</span><span><i className="blocked"></i>Blocked</span></div></section>
-            <section className="admin-split"><div className="admin-panel"><div className="panel-head"><div><span>Latest</span><h2>Recent bookings</h2></div><button onClick={()=>setTab('bookings')}>View all →</button></div><div className="mini-bookings">{state.bookings.slice(0,4).map(b=><button key={b.id} onClick={()=>setSelected(b)}><span><strong>{b.customer}</strong><small>{b.groupId||b.id} · {b.courtName}</small></span><span><strong>{shortDate(b.date)}</strong><small>{b.time}</small></span><i className={b.paymentStatus==='Paid'?'paid':b.paymentStatus==='Pending review'?'pending':''}>{b.paymentStatus}</i></button>)}</div></div>
-            <div className="admin-panel"><div className="panel-head"><div><span>Payments</span><h2>Waiting for review</h2></div></div>{pendingGroups.length?<div className="review-queue">{pendingGroups.slice(0,3).map(group=><div key={group.reference}><span><strong>{group.first.customer}</strong><small>{group.reference} · {group.bookings.length} court-hour{group.bookings.length!==1?'s':''}</small></span><button onClick={()=>verify(group.first.id)}><CheckIcon/>Verify</button></div>)}</div>:<div className="empty-state">No proofs waiting for review.</div>}</div></section>
+            <section className="admin-metrics"><article><span>Today’s court-hours</span><strong>{state.bookings.filter(b=>b.date===dates[0].iso).length}</strong><small>{state.courts.map(c=>c.shortName).join(' · ')}</small></article><article><span>Paid total</span><strong>{money(paidTotal)}</strong><small>Across demo bookings</small></article><article><span>Staff-created unpaid</span><strong>{unpaidStaffBookings.length}</strong><small>Public bookings appear only after payment</small></article></section>
+            <section className="admin-panel"><div className="panel-head"><div><span>Today</span><h2>Courts at a glance</h2></div><button onClick={()=>setTab('schedule')}>Open schedule →</button></div><div className="overview-schedule"><div className="overview-schedule-head"><span>Peak hours</span>{timeSlots.slice(6,12).map(t=><small key={t}>{t.replace(':00 ',' ')}</small>)}</div>{state.courts.map(c=><div key={c.id}><span>{c.shortName}</span>{timeSlots.slice(6,12).map(t=>{const b=state.bookings.find(x=>x.date===dates[0].iso&&x.courtId===c.id&&bookingTimes(x).includes(t));const blocked=state.blocked.includes(`${dates[0].iso}|${c.id}|${t}`);return <i key={t} className={b?'busy':blocked?'blocked':''} title={`${t} · ${b?b.customer:blocked?'Blocked':'Available'}`}></i>})}</div>)}</div><div className="overview-key"><span><i></i>Available</span><span><i className="busy"></i>Booked</span><span><i className="blocked"></i>Blocked</span></div></section>
+            <section className="admin-split"><div className="admin-panel"><div className="panel-head"><div><span>Latest</span><h2>Recent bookings</h2></div><button onClick={()=>setTab('bookings')}>View all →</button></div><div className="mini-bookings">{state.bookings.slice(0,4).map(b=><button key={b.id} onClick={()=>setSelected(b)}><span><strong>{b.customer}</strong><small>{b.groupId||b.id} · {b.courtName}</small></span><span><strong>{shortDate(b.date)}</strong><small>{b.time}</small></span><i className={b.paymentStatus==='Paid'?'paid':''}>{b.paymentStatus}</i></button>)}</div></div>
+            <div className="admin-panel"><div className="panel-head"><div><span>Public checkout</span><h2>Pay first, then booked.</h2></div></div><div className="payment-rule-admin"><CheckIcon/><p>Public slots are added to the schedule only after successful online payment. Staff-created walk-ins remain a separate staff action.</p></div></div></section>
           </div>}
 
-          {tab==='schedule' && <div className="admin-view"><div className="admin-toolbar"><div className="admin-date-tabs">{dates.slice(0,5).map(d=><button className={date===d.iso?'active':''} key={d.iso} onClick={()=>setDate(d.iso)}><small>{d.dow}</small><strong>{d.day}</strong></button>)}</div><div className="staff-schedule-help"><div className="staff-slot-legend"><span><i className="available">A</i>Available</span><span><i className="booked">B</i>Booked</span><span><i className="reserved">R</i>Reserved</span><span><i className="blocked">M</i>Blocked</span></div><p>Tap A to block a slot, M to reopen it, or B/R to view the booking.</p></div></div><div className="schedule-grid"><div className="schedule-grid-head"><span>Time</span>{state.courts.map(c=><strong key={c.id}>{c.shortName}</strong>)}</div>{timeSlots.map(time=><div className="schedule-grid-row" key={time}><span>{time}</span>{state.courts.map(c=><div key={c.id}>{slot(c.id,time)}</div>)}</div>)}</div></div>}
+          {tab==='schedule' && <div className="admin-view"><div className="admin-toolbar"><div className="admin-date-tabs">{dates.slice(0,5).map(d=><button className={date===d.iso?'active':''} key={d.iso} onClick={()=>setDate(d.iso)}><small>{d.dow}</small><strong>{d.day}</strong></button>)}</div><div className="staff-schedule-help"><div className="staff-slot-legend"><span><i className="available">A</i>Available</span><span><i className="booked">B</i>Booked</span><span><i className="blocked">M</i>Blocked</span></div><p>Tap A to block a slot, M to reopen it, or B to view the booking.</p></div></div><div className="schedule-grid"><div className="schedule-grid-head"><span>Time</span>{state.courts.map(c=><strong key={c.id}>{c.shortName}</strong>)}</div>{timeSlots.map(time=><div className="schedule-grid-row" key={time}><span>{time}</span>{state.courts.map(c=><div key={c.id}>{slot(c.id,time)}</div>)}</div>)}</div></div>}
 
-          {tab==='bookings' && <div className="admin-view"><div className="list-head"><div><span>All demo records</span><h2>{state.bookings.length} court-hours</h2></div><div className="legend"><span><i className="dot paid"></i>Paid</span><span><i className="dot pending"></i>Pending review</span><span><i className="dot"></i>Unpaid</span></div></div><div className="booking-table"><div className="booking-table-head"><span>Booking</span><span>Schedule</span><span>Payment</span><span>Source</span></div>{state.bookings.map(b=><button key={b.id} onClick={()=>setSelected(b)}><span><strong>{b.customer}</strong><small>{b.groupId||b.id}</small></span><span><strong>{b.courtName}</strong><small>{shortDate(b.date)} · {b.time}</small></span><span><strong>{money(b.amount)}</strong><small className={b.paymentStatus==='Paid'?'paid-text':b.paymentStatus==='Pending review'?'pending-text':''}>{b.paymentStatus}</small></span><span><strong>{b.source}</strong><small>{b.paymentMethod}</small></span></button>)}</div></div>}
+          {tab==='bookings' && <div className="admin-view"><div className="list-head"><div><span>All demo records</span><h2>{state.bookings.length} court-hours</h2></div><div className="legend"><span><i className="dot paid"></i>Paid</span><span><i className="dot"></i>Staff-created unpaid</span></div></div><div className="booking-table"><div className="booking-table-head"><span>Booking</span><span>Schedule</span><span>Payment</span><span>Source</span></div>{state.bookings.map(b=><button key={b.id} onClick={()=>setSelected(b)}><span><strong>{b.customer}</strong><small>{b.groupId||b.id}</small></span><span><strong>{b.courtName}</strong><small>{shortDate(b.date)} · {b.time}</small></span><span><strong>{money(b.amount)}</strong><small className={b.paymentStatus==='Paid'?'paid-text':''}>{b.paymentStatus}</small></span><span><strong>{b.source}</strong><small>{b.paymentMethod}</small></span></button>)}</div></div>}
 
-          {tab==='payments' && <div className="admin-view"><div className="list-head"><div><span>Manual verification</span><h2>Payment proofs</h2></div><p>One proof is shown per booking reference. Verify it once to confirm every included court-hour.</p></div>{pendingGroups.length?<div className="payment-review-grid">{pendingGroups.map(group=>{const b=group.first;return <article key={group.reference}><div className="proof-visual"><div className="admin-proof-brand"><PickleRVerseBrand markOnly/><span>{state.venue.paymentName}</span></div><span>Payment proof</span><strong>{money(group.total)}</strong><small>{b.proofName||'sample-payment-proof.jpg'}</small><i>{group.reference}</i></div><div className="proof-details"><span>{group.reference}</span><h3>{b.customer}</h3><p>{shortDate(b.date)} · {group.bookings.length} court-hour{group.bookings.length!==1?'s':''}</p><dl><div><dt>Method</dt><dd>{b.paymentMethod}</dd></div><div><dt>Status</dt><dd className="pending-text">Pending review</dd></div></dl><button onClick={()=>verify(b.id)}><CheckIcon/>Verify payment</button></div></article>})}</div>:<div className="large-empty"><CheckIcon/><h2>Everything is reviewed.</h2><p>Create a public booking with “Upload payment proof” to populate this queue again.</p><Link to="/demo/book">Create demo booking →</Link></div>}</div>}
+          {tab==='payments' && <div className="admin-view"><div className="list-head"><div><span>Payment records</span><h2>Paid public bookings</h2></div><p>Public bookings appear here only after successful checkout.</p></div><div className="payment-ledger">{state.bookings.filter(b=>b.source==='Public').map(b=><article key={b.id}><span><strong>{b.groupId||b.id}</strong><small>{b.customer} · {b.courtName}</small></span><span><strong>{money(b.amount)}</strong><small>{shortDate(b.date)} · {b.time}</small></span><i>{b.paymentMethod} · Paid</i></article>)}</div></div>}
+
+          {tab==='openplays' && <div className="admin-view admin-open-plays-view">
+            <div className="list-head"><div><span>Public event listings</span><h2>{state.openPlays.filter(item=>item.published).length} published open plays</h2></div><p>Court-hosted sessions open inside RVerse. Reclub-hosted sessions send players to the organizer platform.</p></div>
+            <div className="admin-open-play-grid">{state.openPlays.map(item=>{const spots=Math.max(0,item.maxPlayers-item.registered);return <article key={item.id} className={!item.published?'is-hidden':''}><div className="admin-open-play-head"><span className={item.hostType==='Reclub'?'external':''}>{item.hostType}</span><button onClick={()=>toggleOpenPlayPublished(item.id)}>{item.published?'Published':'Hidden'}</button></div><h3>{item.title}</h3><p>{item.skillLevel}</p><dl><div><dt>When</dt><dd>{shortDate(item.date)} · {item.startTime}</dd></div><div><dt>Capacity</dt><dd>{item.registered}/{item.maxPlayers} · {spots} left</dd></div><div><dt>Fee</dt><dd>{money(item.price)} / player</dd></div><div><dt>Organizer</dt><dd>{item.organizer}</dd></div></dl><div className="admin-open-play-actions">{item.hostType==='Reclub'?<a href={item.externalUrl||'https://reclub.co/'} target="_blank" rel="noreferrer">Open Reclub <ExternalIcon/></a>:<Link to={`/demo/open-plays/${item.id}`}>View public page →</Link>}<small>{item.published?'Visible to players':'Removed from the public listing'}</small></div></article>})}</div>
+          </div>}
 
           {tab==='settings' && <div className="admin-view settings-view">
             <div className="settings-intro"><div><span>Public court setup</span><h2>Change what players see.</h2><p>Open only the section you need. Changes to courts, rates, venue details, rules, and payment instructions feed the public PickleRVerse demo.</p></div><button className="admin-primary settings-save" onClick={saveSettings}><CheckIcon/><span>{settingsSaved?'Saved':'Save changes'}</span></button></div>
@@ -196,7 +185,7 @@ export default function AdminDemo() {
               <div className="settings-textarea-grid"><label>Amenities <small>One per line</small><textarea value={settingsDraft.venue.amenities.join('\n')} onChange={e=>updateVenueList('amenities',e.target.value)}/></label><label>Nearby places <small>One per line</small><textarea value={settingsDraft.venue.nearby.join('\n')} onChange={e=>updateVenueList('nearby',e.target.value)}/></label><label className="settings-wide">House rules <small>One per line</small><textarea value={settingsDraft.venue.rules.join('\n')} onChange={e=>updateVenueList('rules',e.target.value)}/></label></div>
             </SettingsGroup>
 
-            <SettingsGroup eyebrow="Payments" title="Manual payment details">
+            <SettingsGroup eyebrow="Payments" title="Online payment identity">
               <div className="venue-settings-grid"><label>Payment recipient<input value={settingsDraft.venue.paymentName} onChange={e=>updateVenueDraft('paymentName',e.target.value)}/></label><label>Payment number<input inputMode="tel" value={settingsDraft.venue.paymentNumber} onChange={e=>updateVenueDraft('paymentNumber',e.target.value)}/></label><label className="settings-wide">Payment instructions<textarea value={settingsDraft.venue.paymentInstructions} onChange={e=>updateVenueDraft('paymentInstructions',e.target.value)}/></label></div>
             </SettingsGroup>
 
@@ -207,7 +196,7 @@ export default function AdminDemo() {
         </main>
       </div>
 
-      {selected && <div className="admin-drawer-layer" onMouseDown={e=>e.currentTarget===e.target&&setSelected(null)}><aside className="booking-drawer"><button className="drawer-close" onClick={()=>setSelected(null)}>×</button><span>{selected.groupId||selected.id}</span><h2>{selected.customer}</h2><p>{selected.courtName} · {shortDate(selected.date)} · {selected.time}</p><div className="drawer-facts"><div><span>Duration</span><strong>1 hour</strong></div><div><span>Amount</span><strong>{money(selected.amount)}</strong></div><div><span>Payment</span><strong>{selected.paymentMethod}</strong></div><div><span>Status</span><strong className={selected.paymentStatus==='Paid'?'paid-text':selected.paymentStatus==='Pending review'?'pending-text':''}>{selected.paymentStatus}</strong></div><div><span>Source</span><strong>{selected.source}</strong></div>{selected.email&&<div><span>Email</span><strong>{selected.email}</strong></div>}{selected.proofName&&<div><span>Proof</span><strong>{selected.proofName}</strong></div>}</div><div className="drawer-reschedule"><label>Move this slot to<select value={moveTime} onChange={e=>setMoveTime(e.target.value)}>{availableTimesFor(selected).map(t=><option key={t}>{t}</option>)}</select></label><button onClick={rescheduleSelected} disabled={moveTime===selected.time}>Update time</button></div>{selected.paymentStatus==='Pending review'&&<button className="admin-primary drawer-action" onClick={()=>verify(selected.id)}><CheckIcon/><span>Verify whole payment</span></button>}<button className="drawer-cancel" onClick={cancelSelected}>Cancel this slot</button></aside></div>}
+      {selected && <div className="admin-drawer-layer" onMouseDown={e=>e.currentTarget===e.target&&setSelected(null)}><aside className="booking-drawer"><button className="drawer-close" onClick={()=>setSelected(null)}>×</button><span>{selected.groupId||selected.id}</span><h2>{selected.customer}</h2><p>{selected.courtName} · {shortDate(selected.date)} · {selected.time}</p><div className="drawer-facts"><div><span>Duration</span><strong>1 hour</strong></div><div><span>Amount</span><strong>{money(selected.amount)}</strong></div><div><span>Payment</span><strong>{selected.paymentMethod}</strong></div><div><span>Status</span><strong className={selected.paymentStatus==='Paid'?'paid-text':''}>{selected.paymentStatus}</strong></div><div><span>Source</span><strong>{selected.source}</strong></div>{selected.email&&<div><span>Email</span><strong>{selected.email}</strong></div>}</div><div className="drawer-reschedule"><label>Move this slot to<select value={moveTime} onChange={e=>setMoveTime(e.target.value)}>{availableTimesFor(selected).map(t=><option key={t}>{t}</option>)}</select></label><button onClick={rescheduleSelected} disabled={moveTime===selected.time}>Update time</button></div><button className="drawer-cancel" onClick={cancelSelected}>Cancel this slot</button></aside></div>}
 
       {manualOpen && <div className="admin-drawer-layer" onMouseDown={e=>e.currentTarget===e.target&&setManualOpen(false)}><aside className="booking-drawer manual-drawer"><button className="drawer-close" onClick={()=>setManualOpen(false)}>×</button><span>Staff booking</span><h2>Add a booking.</h2><label>Player name<input value={manualName} onChange={e=>setManualName(e.target.value)}/></label><label>Court<select value={manualCourt} onChange={e=>setManualCourt(e.target.value)}>{state.courts.map(c=><option value={c.id} key={c.id}>{c.name} · {money(c.rate)}/hr</option>)}</select></label><label>Date<select value={date} onChange={e=>setDate(e.target.value)}>{dates.map(d=><option value={d.iso} key={d.iso}>{d.label}</option>)}</select></label><label>Time<select value={manualTime} onChange={e=>setManualTime(e.target.value)}>{timeSlots.map(t=><option key={t} disabled={isOccupied(state,date,manualCourt,t)}>{t}{isOccupied(state,date,manualCourt,t)?' — unavailable':''}</option>)}</select></label><button className="admin-primary drawer-action" onClick={createManual}><PlusIcon/><span>Create booking</span></button></aside></div>}
     </div>

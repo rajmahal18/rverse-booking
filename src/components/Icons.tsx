@@ -22,3 +22,5 @@ export function CarIcon(props: SVGProps<SVGSVGElement>) { return <svg {...base} 
 export function InfoIcon(props: SVGProps<SVGSVGElement>) { return <svg {...base} {...props}><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></svg> }
 export function CopyIcon(props: SVGProps<SVGSVGElement>) { return <svg {...base} {...props}><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg> }
 
+
+export function DownloadIcon(props: SVGProps<SVGSVGElement>) { return <svg {...base} {...props}><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg> }
